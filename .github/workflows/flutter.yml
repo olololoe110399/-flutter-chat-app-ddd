@@ -43,8 +43,8 @@ jobs:
         if: ${{ matrix.flutter-channel == 'stable' }}
         run: flutter analyze lib
 
-      - name: Gen code
-        run: flutter packages pub run build_runner build --delete-conflicting-outputs
+      # - name: Gen code
+      #   run: flutter packages pub run build_runner build --delete-conflicting-outputs
 
       - name: Build APK
         run: flutter build apk --no-shrink
