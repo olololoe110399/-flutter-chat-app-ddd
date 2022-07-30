@@ -1,17 +1,34 @@
-# flutter_chat_app_ddd
+# Flutter Chap App DDD
 
-A new Flutter project.
+Flutter project using Domain-Driven Design and bloc pattern
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Requirements
 
-A few resources to get you started if this is your first Flutter project:
+- Dart: 2.16.2
+- Flutter SDK: 2.10.5
+- CocoaPods: 1.11.3
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Install
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# -flutter-chat-app-ddd
+- WARN: If you already and `lefthook` and `lcov`, you could omit this step.
+
+- Install lefthook:
+  - Run `gem install lefthook` or  `sudo gem install lefthook`
+
+- Get path:
+  - Run `which lefthook`
+
+- Export paths:
+  - Add to `.zshrc` or `.bashrc`
+
+```bash
+export PATH="$PATH:~/.gem/gems/lefthook-0.7.7/bin"
+```
+
+- Save file `.zshrc`
+- Run `source ~/.zshrc`
+
+- Install lcov:
+  - Run `brew install lcov`

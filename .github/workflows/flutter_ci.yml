@@ -1,0 +1,45 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env: 
+  JAVA_VERSION: "12.x"
+  FLUTTER_VERSION: "2.10.5"
+  
+
+jobs:
+  test:
+    name: Check format, link, unit test.
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{env.JAVA_VERSION}}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{env.FLUTTER_VERSION}}
+
+      - name: Print Dart SDK version
+        run: dart --version
+
+      - name: Print Flutter SDK version
+        run: flutter --version
+
+      - name: Install dependencies and run build runner
+        run: make sync
+
+      - name: Format code
+        run: make format
+
+      - name: Analyze
+        run: make analyze
+
+      - name: Metrics
+        run: make metrics
