@@ -11,4 +11,4 @@ updates:
     schedule:
       interval: "weekly"
       time: "09:00"
-      timezone: "UTC +7"
+      timezone: "Asia/VietNam"
