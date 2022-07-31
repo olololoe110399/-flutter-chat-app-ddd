@@ -1,19 +1,16 @@
 {
-    "[dart]": {
-        "editor.formatOnSave": true,
-        "editor.formatOnType": true,
-        "editor.rulers": [
-            100
-        ],
-        "editor.defaultFormatter": "Dart-Code.dart-code",
-        "editor.suggestSelection": "first",
-        "editor.selectionHighlight": false,
-        "editor.wordBasedSuggestions": false,
-
-    },
-    "debug.openDebug": "openOnDebugBreak",
-    "dart.lineLength": 100,
-    "cSpell.diagnosticLevel": "Hint",
-    "gcn.xml.support": true,
-    "dart.runPubGetOnPubspecChanges": false,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [100],
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.suggestSelection": "first",
+    "editor.selectionHighlight": false,
+    "editor.wordBasedSuggestions": false
+  },
+  "debug.openDebug": "openOnDebugBreak",
+  "dart.lineLength": 100,
+  "cSpell.diagnosticLevel": "Hint",
+  "gcn.xml.support": true,
+  "dart.runPubGetOnPubspecChanges": false
 }

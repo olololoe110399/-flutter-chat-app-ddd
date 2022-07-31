@@ -1,5 +1,5 @@
 lint: 
-	make format && make analyze && make metrics
+	make format && make analyze && make dart_code_metrics
 
 sync:
 	make pub_get && make force_build_runner
@@ -8,13 +8,16 @@ pub_get:
 	flutter pub get
 
 format:
-	flutter format ./ --set-exit-if-changed -l 100
+	find ./lib -name "*.dart" ! -name "*.g.dart" ! -name "*.freezed.dart" ! -name "*.gr.dart" ! -name "*.config.dart" ! -name "*.mocks.dart" ! -path '*/generated/*' ! -path '.dart_tool/**' | tr '\n' ' ' | xargs flutter format --set-exit-if-changed -l 100
 
 analyze: 
-	flutter analyze --no-pub --suppress-analytics
+	flutter analyze --no-pub --suppress-analytics lib
 
 metrics:
 	flutter pub run dart_code_metrics:metrics analyze lib
+
+dart_code_metrics:
+	sh ./tools/dart_code_metrics.sh
 
 build_runner:
 	flutter packages pub run build_runner build

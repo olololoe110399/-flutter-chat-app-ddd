@@ -46,3 +46,19 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# generated file
+*.g.dart
+*.graphql.dart
+*.gr.dart
+*.freezed.dart
+*.config.dart
+*.gen.dart
+*.mocks.dart
+resources/lib/src/generated
+app/lib/ui/res/generated
+data/lib/src/repository/model/generated
+
+tools/*/*.jar
+tools/gen_text_styles/output/
+app/ios/*ExportOptions.plist
