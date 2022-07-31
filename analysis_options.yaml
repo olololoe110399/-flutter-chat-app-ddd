@@ -2,16 +2,16 @@ analyzer:
   plugins:
     - dart_code_metrics
   exclude:
-    - "*/.g.dart"
-    - "*/.graphql.dart"
-    - "*/.gr.dart"
-    - "*/.freezed.dart"
-    - "*/.config.dart"
-    - "*/.gen.dart"
-    - "*/test/**/.dart"
-    - "*/test/.dart"
-    - "resources/lib/src/generated/intl/*.dart"
-    - "resources/lib/src/generated/*.dart"
+    - "**/*.g.dart"
+    - "**/*.graphql.dart"
+    - "**/*.gr.dart"
+    - "**/*.freezed.dart"
+    - "**/*.config.dart"
+    - "**/*.gen.dart"
+    - "**/test/**/.dart"
+    - "**/test/.dart"
+    - "**/generated/**"
+    - ".dart_tool/**"
   strong-mode:
     implicit-casts: true
     implicit-dynamic: false
