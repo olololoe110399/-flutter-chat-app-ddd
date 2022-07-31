@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../shared/enum.dart';
+import '../../presentation/presentation.dart';
+import '../../shared/shared.dart';
 import '../core/core.dart';
 
 part 'common_state.freezed.dart';
@@ -11,5 +12,6 @@ class CommonState extends BaseBlocState with _$CommonState {
     @Default(LanguageCode.en) LanguageCode languageCode,
     @Default(false) bool isLoading,
     @Default(false) bool isDarkTheme,
+    AppExceptionWrapper? appExceptionWrapper,
   }) = _CommonState;
 }

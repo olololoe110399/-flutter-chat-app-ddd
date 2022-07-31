@@ -33,6 +33,7 @@ dependencies:
   auto_route: ^4.2.1
   cupertino_icons: ^1.0.5
 
+  dartz: ^0.10.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1

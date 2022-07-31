@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../core/base_bloc.dart';
+import '../core/core.dart';
 import 'common_event.dart';
 import 'common_state.dart';
 
@@ -13,7 +13,7 @@ class CommonBloc extends BaseBloc<CommonEvent, CommonState> {
     on<LoadingChanged>(onLoadingChanged);
     on<AppThemeChanged>(onAppThemeChanged);
     on<AppLanguageChanged>(onAppLanguageChanged);
-    on<Initital>(onInitial);
+    on<ExceptionEmitted>(onExceptionEmitted);
   }
 
   Future<void> onLoadingChanged(
@@ -49,10 +49,14 @@ class CommonBloc extends BaseBloc<CommonEvent, CommonState> {
     );
   }
 
-  Future<void> onInitial(
-    Initital event,
+  Future<void> onExceptionEmitted(
+    ExceptionEmitted event,
     Emitter<CommonState> emit,
   ) async {
-    // initial page
+    emit(
+      state.copyWith(
+        appExceptionWrapper: event.appExceptionWrapper,
+      ),
+    );
   }
 }
