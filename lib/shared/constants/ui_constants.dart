@@ -35,11 +35,7 @@ class UiConstants {
     DeviceOrientation.landscapeRight,
   ];
   static DeviceType _getDeviceType() {
-    if (WidgetsBinding.instance == null || WidgetsBinding.instance?.window == null) {
-      return DeviceType.mobile;
-    }
-
-    final data = MediaQueryData.fromWindow(WidgetsBinding.instance!.window);
+    final data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
 
     return data.size.shortestSide < maxMobileWidthForDeviceType
         ? DeviceType.mobile
