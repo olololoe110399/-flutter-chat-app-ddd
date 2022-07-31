@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../application/common/common.dart';
+import '../../application/application.dart';
 import '../../generated/l10n.dart';
 import '../../inejection.dart';
 import '../../shared/shared.dart';

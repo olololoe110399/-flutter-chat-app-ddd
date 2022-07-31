@@ -2,19 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/common/common.dart';
-import '../../application/core/base_bloc.dart';
+import '../../application/application.dart';
 import '../../inejection.dart';
 import '../../shared/shared.dart';
+import '../error/error.dart';
 import '../navigator/navigator.dart';
 
 abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
-    extends BasePageStateDelegete<T, B> {}
+    extends BasePageStateDelegete<T, B> with ErrorListenerMixin {
+  @override
+  Widget buildPageListener({required Widget child}) {
+    return BlocListener<CommonBloc, CommonState>(
+      listenWhen: (previous, current) =>
+          previous.appExceptionWrapper != current.appExceptionWrapper &&
+          current.appExceptionWrapper != null,
+      listener: (context, state) => handleException.handleException(
+        state.appExceptionWrapper!,
+        context,
+        this,
+      ),
+      child: child,
+    );
+  }
+}
 
 abstract class BasePageStateDelegete<T extends StatefulWidget, B extends BaseBloc> extends State<T>
     with AutomaticKeepAliveClientMixin {
   late final AppNavigator navigator = getIt.get<AppNavigator>();
-
+  late final HandleException handleException = HandleException();
   late final CommonBloc commonBloc = getIt.get<CommonBloc>();
 
   late final B bloc = getIt.get<B>()

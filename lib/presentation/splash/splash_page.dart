@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../application/common/common.dart';
+import '../../application/application.dart';
 import '../core/core.dart';
-import 'splash_bloc.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -11,15 +11,34 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends BasePageState<SplashPage, SplashBloc> {
+class _SplashPageState extends BasePageState<SplashPage, AuthBloc> {
   @override
   void initState() {
     super.initState();
-    commonBloc.add(const CommonEvent.loadingVisibity(true));
-    Future.delayed(const Duration(seconds: 3), () {
-      commonBloc.add(const CommonEvent.loadingVisibity(false));
-      commonBloc.add(const CommonEvent.appThemeChanged(true));
-    });
+    bloc.add(const AuthEvent.authCheckRequested());
+  }
+
+  @override
+  Widget buildPageListener({required Widget child}) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listenWhen: (previous, current) => previous != current,
+          listener: (context, state) {
+            state.map(
+              initial: (_) {},
+              authenticated: (_) {
+                // navigator.replace(const HomeRoute());
+              },
+              unauthenticated: (_) {
+                // navigator.replace(const SignInRoute());
+              },
+            );
+          },
+        ),
+      ],
+      child: child,
+    );
   }
 
   @override
