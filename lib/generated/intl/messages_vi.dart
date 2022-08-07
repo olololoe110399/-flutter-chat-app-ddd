@@ -26,6 +26,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "contacts": MessageLookupByLibrary.simpleMessage("Danh bạ"),
         "messages": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
         "notifications": MessageLookupByLibrary.simpleMessage("Thông báo"),
-        "stories": MessageLookupByLibrary.simpleMessage("Bảng tin")
+        "onlineNow": MessageLookupByLibrary.simpleMessage("Đang trực tuyến"),
+        "stories": MessageLookupByLibrary.simpleMessage("Bảng tin"),
+        "typeSomething":
+            MessageLookupByLibrary.simpleMessage("Gõ gì đó tại đây...")
       };
 }

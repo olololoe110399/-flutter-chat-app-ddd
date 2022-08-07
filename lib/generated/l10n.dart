@@ -99,6 +99,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Type something...`
+  String get typeSomething {
+    return Intl.message(
+      'Type something...',
+      name: 'typeSomething',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Online now`
+  String get onlineNow {
+    return Intl.message(
+      'Online now',
+      name: 'onlineNow',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

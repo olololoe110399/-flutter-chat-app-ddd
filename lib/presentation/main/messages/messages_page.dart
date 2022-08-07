@@ -1,6 +1,5 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'package:jiffy/jiffy.dart';
 
 import '../../../application/application.dart';
 import '../../../domain/domain.dart';
@@ -34,15 +33,21 @@ class _MessagesPageState extends BasePageState<MessagesPage, MessagesBloc> {
   Widget _delegete(BuildContext context, int index) {
     final faker = Faker();
     final date = RandomUtils.randomDate();
+    final messageData = MessageEntity(
+      senderName: faker.person.name(),
+      message: faker.lorem.sentence(),
+      messageDate: date,
+      dateMessage: DateTimeUtils.fromNow(date),
+      profilePicture: RandomUtils.randomPictureUrl(),
+    );
 
     return _MessageTitle(
-      messageData: MessageEntity(
-        senderName: faker.person.name(),
-        message: faker.lorem.sentence(),
-        messageDate: date,
-        dateMessage: Jiffy(date).fromNow(),
-        profilePicture: RandomUtils.randomPictureUrl(),
-      ),
+      messageData: messageData,
+      onTap: () {
+        navigator.push(ChatRoute(
+          messageEntity: messageData,
+        ));
+      },
     );
   }
 }
@@ -50,49 +55,116 @@ class _MessagesPageState extends BasePageState<MessagesPage, MessagesBloc> {
 class _MessageTitle extends StatelessWidget {
   const _MessageTitle({
     required this.messageData,
+    required this.onTap,
     Key? key,
   }) : super(key: key);
 
   final MessageEntity messageData;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(Dimens.d10.responsive()),
-          child: Avatar.medium(
-            url: messageData.profilePicture,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(Dimens.d4.responsive()),
+        height: Dimens.d100.responsive(),
+        margin: EdgeInsets.symmetric(
+          horizontal: Dimens.d8.responsive(),
+        ),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey,
+              width: 0.2,
+            ),
           ),
         ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                messageData.senderName,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  letterSpacing: 0.2,
-                  wordSpacing: 1.5,
-                  fontWeight: FontWeight.w900,
-                ),
+        child: Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(Dimens.d10.responsive()),
+              child: Avatar.medium(
+                url: messageData.profilePicture,
               ),
-              SizedBox(
-                height: Dimens.d20.responsive(),
-                child: Text(
-                  messageData.message,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: Dimens.d12.responsive(),
-                    color: AppColors.textFaded,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: Dimens.d8.responsive()),
+                    child: Text(
+                      messageData.senderName,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        letterSpacing: 0.2,
+                        wordSpacing: 1.5,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    height: Dimens.d20.responsive(),
+                    child: Text(
+                      messageData.message,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: Dimens.d12.responsive(),
+                        color: AppColors.textFaded,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                right: Dimens.d20.responsive(),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    height: Dimens.d4.responsive(),
+                  ),
+                  Text(
+                    messageData.dateMessage.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: Dimens.d11.responsive(),
+                      letterSpacing: -0.2,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textFaded,
+                    ),
+                  ),
+                  SizedBox(
+                    height: Dimens.d8.responsive(),
+                  ),
+                  Container(
+                    height: Dimens.d18.responsive(),
+                    width: Dimens.d18.responsive(),
+                    decoration: const BoxDecoration(
+                      color: AppColors.secondary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '1',
+                        style: TextStyle(
+                          fontSize: Dimens.d10,
+                          color: AppColors.textLigth,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

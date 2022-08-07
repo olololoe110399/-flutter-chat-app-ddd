@@ -1,7 +1,9 @@
 {
-    "messages": "Tin nhắn",
-    "contacts": "Danh bạ",
-    "notifications": "Thông báo",
-    "calls": "Gọi",
-    "stories": "Bảng tin"
+  "messages": "Tin nhắn",
+  "contacts": "Danh bạ",
+  "notifications": "Thông báo",
+  "calls": "Gọi",
+  "stories": "Bảng tin",
+  "typeSomething": "Gõ gì đó tại đây...",
+  "onlineNow": "Đang trực tuyến"
 }
