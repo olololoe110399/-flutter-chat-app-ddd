@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../application/application.dart';
+import '../../shared/shared.dart';
 import '../presentation.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,12 +18,45 @@ class _MainPageState extends BasePageState<MainPage, MainBloc> {
   Widget buildPage(BuildContext context) {
     return AutoTabsScaffold(
       routes: navigator.tabsRoutes,
+      appBarBuilder: (context, tabsRouter) {
+        return AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            BottomTab.values[tabsRouter.activeIndex].title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: Dimens.d16.responsive(),
+            ),
+          ),
+          leadingWidth: Dimens.d54.responsive(),
+          leading: Align(
+            alignment: Alignment.centerRight,
+            child: IconBackground(
+              icon: Icons.search,
+              onTap: () {},
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: Dimens.d24.responsive()),
+              child: Avatar.small(
+                url: RandomUtils.randomPictureUrl(),
+              ),
+            ),
+          ],
+        );
+      },
       bottomNavigationBuilder: (context, tabsRouter) {
         return BottomNavigationBar(
           currentIndex: tabsRouter.activeIndex,
           onTap: (index) => tabsRouter.setActiveIndex(index),
           showSelectedLabels: true,
           showUnselectedLabels: true,
+          iconSize: Dimens.d20.responsive(),
+          elevation: 0,
+          selectedFontSize: Dimens.d11.responsive(),
+          unselectedFontSize: Dimens.d11.responsive(),
           type: BottomNavigationBarType.fixed,
           items: BottomTab.values
               .map(

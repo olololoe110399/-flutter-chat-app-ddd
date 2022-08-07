@@ -13,10 +13,6 @@ class ContactsPage extends StatefulWidget {
 class _ContactsPageState extends BasePageState<ContactsPage, ContactsBloc> {
   @override
   Widget buildPage(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contacts'),
-      ),
-    );
+    return const Scaffold();
   }
 }

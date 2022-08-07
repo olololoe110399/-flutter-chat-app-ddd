@@ -13,10 +13,6 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends BasePageState<NotificationsPage, NotificationsBloc> {
   @override
   Widget buildPage(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Notifications'),
-      ),
-    );
+    return const Scaffold();
   }
 }

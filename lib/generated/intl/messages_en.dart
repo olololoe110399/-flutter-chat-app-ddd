@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "calls": MessageLookupByLibrary.simpleMessage("Calls"),
         "contacts": MessageLookupByLibrary.simpleMessage("Contacts"),
         "messages": MessageLookupByLibrary.simpleMessage("Messages"),
-        "notifications": MessageLookupByLibrary.simpleMessage("Notifications")
+        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "stories": MessageLookupByLibrary.simpleMessage("Stories")
       };
 }

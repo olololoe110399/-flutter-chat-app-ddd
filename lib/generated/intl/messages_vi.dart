@@ -25,6 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "calls": MessageLookupByLibrary.simpleMessage("Gọi"),
         "contacts": MessageLookupByLibrary.simpleMessage("Danh bạ"),
         "messages": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
-        "notifications": MessageLookupByLibrary.simpleMessage("Thông báo")
+        "notifications": MessageLookupByLibrary.simpleMessage("Thông báo"),
+        "stories": MessageLookupByLibrary.simpleMessage("Bảng tin")
       };
 }
