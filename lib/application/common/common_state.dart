@@ -11,7 +11,7 @@ class CommonState extends BaseBlocState with _$CommonState {
   const factory CommonState({
     @Default(LanguageCode.en) LanguageCode languageCode,
     @Default(false) bool isLoading,
-    @Default(true) bool isDarkTheme,
+    @Default(false) bool isDarkTheme,
     AppExceptionWrapper? appExceptionWrapper,
   }) = _CommonState;
 }

@@ -13,10 +13,6 @@ class CallsPage extends StatefulWidget {
 class _CallsPageState extends BasePageState<CallsPage, CallsBloc> {
   @override
   Widget buildPage(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Calls'),
-      ),
-    );
+    return const Scaffold();
   }
 }
