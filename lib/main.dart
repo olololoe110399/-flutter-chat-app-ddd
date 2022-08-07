@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import 'inejection.dart';
-import 'presentation/core/app_widget.dart';
-import 'presentation/routes/routes.dart';
+import 'presentation/presentation.dart';
 import 'shared/constants/ui_constants.dart';
 import 'shared/enum.dart';
 import 'shared/theme/theme.dart';

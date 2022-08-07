@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../application/application.dart';
-import '../core/core.dart';
+import '../presentation.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class _SplashPageState extends BasePageState<SplashPage, AuthBloc> {
             state.map(
               initial: (_) {},
               authenticated: (_) {
-                // navigator.replace(const HomeRoute());
+                navigator.replace(const MainRoute());
               },
               unauthenticated: (_) {
                 // navigator.replace(const SignInRoute());

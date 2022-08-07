@@ -1,1 +1,6 @@
-{}
+{
+    "messages": "Messages",
+    "contacts": "Contacts",
+    "notifications": "Notifications",
+    "calls": "Calls"
+}

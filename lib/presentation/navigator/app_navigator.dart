@@ -4,13 +4,18 @@ import 'package:injectable/injectable.dart';
 
 import '../../inejection.dart';
 import '../../shared/shared.dart';
-import '../routes/routes.dart';
+import 'routes/routes.dart';
 
 @LazySingleton()
 class AppNavigator {
   AppNavigator();
 
-  final tabsRoutes = <TabsRouter>[];
+  final tabsRoutes = const [
+    BottomTabMessagesRouter(),
+    BottomTabNotificationsRouter(),
+    BottomTabCallsRouter(),
+    BottomTabContactsRouter(),
+  ];
 
   static final popups = <Popup>{};
 
