@@ -1,8 +1,11 @@
+l10n:
+	flutter pub run intl_utils:generate
+
 lint: 
 	make format && make analyze && make dart_code_metrics
 
 sync:
-	make pub_get && make force_build_runner
+	make pub_get && make l10n && make force_build_runner
 
 pub_get:
 	flutter pub get

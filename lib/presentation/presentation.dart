@@ -1,4 +1,5 @@
+export '../generated/l10n.dart';
 export 'core/core.dart';
+export 'main/main.dart';
 export 'navigator/navigator.dart';
-export 'routes/routes.dart';
 export 'splash/splash.dart';

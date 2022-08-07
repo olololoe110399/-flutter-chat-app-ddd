@@ -8,7 +8,6 @@ import '../../generated/l10n.dart';
 import '../../inejection.dart';
 import '../../shared/shared.dart';
 import '../navigator/navigator.dart';
-import '../routes/routes.dart';
 import 'core.dart';
 
 class AppWidget extends StatefulWidget {
