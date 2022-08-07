@@ -1,7 +1,9 @@
 {
-    "messages": "Messages",
-    "contacts": "Contacts",
-    "notifications": "Notifications",
-    "calls": "Calls",
-    "stories": "Stories"
+  "messages": "Messages",
+  "contacts": "Contacts",
+  "notifications": "Notifications",
+  "calls": "Calls",
+  "stories": "Stories",
+  "typeSomething": "Type something...",
+  "onlineNow": "Online now"
 }

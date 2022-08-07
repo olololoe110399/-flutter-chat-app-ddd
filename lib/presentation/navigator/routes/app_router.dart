@@ -9,6 +9,10 @@ import '../../presentation.dart';
       page: SplashPage,
       initial: true,
     ),
+    AutoRoute<dynamic>(
+      page: ChatPage,
+      initial: true,
+    ),
     mainRouter,
   ],
 )
