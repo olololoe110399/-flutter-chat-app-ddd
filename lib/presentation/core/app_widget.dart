@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../../application/application.dart';
 import '../../generated/l10n.dart';
@@ -13,10 +14,12 @@ import 'core.dart';
 class AppWidget extends StatefulWidget {
   const AppWidget({
     required this.appTheme,
+    required this.client,
     Key? key,
   }) : super(key: key);
 
   final AppTheme appTheme;
+  final StreamChatClient client;
 
   @override
   State<AppWidget> createState() => _AppWidgetState();
@@ -39,38 +42,41 @@ class _AppWidgetState extends BasePageState<AppWidget, CommonBloc> {
         buildWhen: (previous, current) =>
             previous.isDarkTheme != current.isDarkTheme ||
             previous.languageCode != current.languageCode,
-        builder: (_, state) => MaterialApp.router(
-          builder: (BuildContext context, Widget? child) {
-            final data = MediaQuery.of(context);
+        builder: (_, state) => StreamChatCore(
+          client: widget.client,
+          child: MaterialApp.router(
+            builder: (BuildContext context, Widget? child) {
+              final data = MediaQuery.of(context);
 
-            return MediaQuery(
-              data: data.copyWith(textScaleFactor: 1.0),
-              child: child ?? const SizedBox.shrink(),
-            );
-          },
-          routerDelegate: _appRouter.delegate(
-            initialRoutes: [const SplashRoute()],
-            navigatorObservers: () => [AppNavigatorObserver()],
+              return MediaQuery(
+                data: data.copyWith(textScaleFactor: 1.0),
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
+            routerDelegate: _appRouter.delegate(
+              initialRoutes: [const SplashRoute()],
+              navigatorObservers: () => [AppNavigatorObserver()],
+            ),
+            routeInformationParser: _appRouter.defaultRouteParser(),
+            title: UiConstants.materialTitleApp,
+            theme: widget.appTheme.light,
+            darkTheme: widget.appTheme.dark,
+            themeMode: state.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
+            debugShowCheckedModeBanner: false,
+            localeResolutionCallback: (
+              Locale? locale,
+              Iterable<Locale> supportedLocales,
+            ) =>
+                supportedLocales.contains(locale) ? locale : Locale(LanguageCode.en.locale),
+            locale: Locale(state.languageCode.locale),
+            supportedLocales: S.delegate.supportedLocales,
+            localizationsDelegates: const [
+              S.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
           ),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-          title: UiConstants.materialTitleApp,
-          theme: widget.appTheme.light,
-          darkTheme: widget.appTheme.dark,
-          themeMode: state.isDarkTheme ? ThemeMode.dark : ThemeMode.light,
-          debugShowCheckedModeBanner: false,
-          localeResolutionCallback: (
-            Locale? locale,
-            Iterable<Locale> supportedLocales,
-          ) =>
-              supportedLocales.contains(locale) ? locale : Locale(LanguageCode.en.locale),
-          locale: Locale(state.languageCode.locale),
-          supportedLocales: S.delegate.supportedLocales,
-          localizationsDelegates: const [
-            S.delegate,
-            GlobalCupertinoLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-          ],
         ),
       ),
     );

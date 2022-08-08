@@ -4,12 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../../application/application.dart';
 import '../../inejection.dart';
+import '../../presentation/presentation.dart';
 import '../../shared/shared.dart';
-import '../error/error.dart';
-import '../navigator/navigator.dart';
 
 abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
-    extends BasePageStateDelegete<T, B> with ErrorListenerMixin {
+    extends BasePageStateDelegete<T, B> with ErrorListenerMixin, LogMixin {
   @override
   Widget buildPageListener({required Widget child}) {
     return BlocListener<CommonBloc, CommonState>(
@@ -46,6 +45,7 @@ abstract class BasePageStateDelegete<T extends StatefulWidget, B extends BaseBlo
     super.build(context);
     if (!isAppWidget) {
       AppDimen.of(context);
+      AppStreamChat.of(context);
     }
 
     return Provider(

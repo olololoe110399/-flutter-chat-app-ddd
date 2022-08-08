@@ -22,6 +22,9 @@ metrics:
 dart_code_metrics:
 	sh ./tools/dart_code_metrics.sh
 
+dart_defines:
+	dart ./tools/dart_defines.dart
+
 build_runner:
 	flutter packages pub run build_runner build
 

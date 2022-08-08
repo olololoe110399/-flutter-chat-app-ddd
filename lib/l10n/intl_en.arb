@@ -5,5 +5,11 @@
   "calls": "Calls",
   "stories": "Stories",
   "typeSomething": "Type something...",
-  "onlineNow": "Online now"
+  "onlineNow": "Online now",
+  "noName": "No name",
+  "signOut": "Sign out",
+  "profile": "Profile",
+  "thereAreNotUsers": "There are not users",
+  "ohNoSomethingWentWrong": "Oh no, something went wrong. ",
+  "pleaseCheckYourConfigError": "Please check your config:\n {error}"
 }

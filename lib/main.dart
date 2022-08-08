@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import 'inejection.dart';
 import 'presentation/presentation.dart';
-import 'shared/constants/ui_constants.dart';
-import 'shared/enum.dart';
-import 'shared/theme/theme.dart';
-import 'shared/utils/view_utils.dart';
+import 'shared/shared.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +16,11 @@ Future<void> main() async {
         : UiConstants.tabletOrientation,
   );
   ViewUtils.setSystemUIOverlayStyle(UiConstants.systemUiOverlay);
+  AppConfig.instance.init();
   runApp(
     AppWidget(
       appTheme: AppTheme(),
+      client: StreamChatClient(AppConfig.instance.streamKey),
     ),
   );
 }

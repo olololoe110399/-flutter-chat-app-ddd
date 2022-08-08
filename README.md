@@ -6,9 +6,17 @@ Flutter project using Domain-Driven Design and bloc pattern
 
 ### Requirements
 
-- Dart: 2.16.2
-- Flutter SDK: 2.10.5
+- Dart: 2.17.6
+- Flutter SDK: 3.0.5
 - CocoaPods: 1.11.3
+
+### Config
+
+- cp env:
+  - Run `cp .env.exampe .env`
+  - STREAM_KEY: get from <https://getstream.io/>
+- Gen env to `.vscode/launch.json`:
+  - Run  `make dart_code_metrics`
 
 ### Install
 

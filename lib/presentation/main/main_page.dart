@@ -41,8 +41,12 @@ class _MainPageState extends BasePageState<MainPage, MainBloc> {
           actions: [
             Padding(
               padding: EdgeInsets.only(right: Dimens.d24.responsive()),
-              child: Avatar.small(
-                url: RandomUtils.randomPictureUrl(),
+              child: Hero(
+                tag: 'hero-profile-picture',
+                child: Avatar.small(
+                  url: AppStreamChat.instance.currentUserImage,
+                  onTap: () => navigator.push(const ProfileRoute()),
+                ),
               ),
             ),
           ],

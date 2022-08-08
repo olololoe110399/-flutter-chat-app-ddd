@@ -62,3 +62,6 @@ data/lib/src/repository/model/generated
 tools/*/*.jar
 tools/gen_text_styles/output/
 app/ios/*ExportOptions.plist
+
+# env
+.env
