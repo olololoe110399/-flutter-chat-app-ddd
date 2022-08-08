@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../../../application/application.dart';
-import '../core/core.dart';
+import '../../shared/shared.dart';
+import '../presentation.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -14,107 +17,163 @@ class _SignUpPageState extends BasePageState<SignUpPage, AuthBloc> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _profilePictureController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _emailRegex =
-      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
     _profilePictureController.dispose();
     _nameController.dispose();
     super.dispose();
   }
 
   @override
+  Widget buildPageListener({required Widget child}) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<AuthBloc, AuthState>(
+          listenWhen: (previous, current) => current.authEntity.isSome(),
+          listener: (context, state) {
+            state.authEntity.fold(() {}, (auth) {
+              AppStreamChat.instance.connectUser(
+                token: auth.token,
+                user: User(
+                  id: auth.user.uid,
+                  name: _nameController.text,
+                  image: _profilePictureController.text,
+                ),
+              );
+              navigator.replace(const MainRoute());
+            });
+          },
+        ),
+      ],
+      child: child,
+    );
+  }
+
+  @override
   Widget buildPage(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CHATTER'),
+        title: Text(S.of(context).chatter),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(Dimens.d16.responsive()),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 24, bottom: 24),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: Dimens.d24.responsive(),
+                    bottom: Dimens.d24.responsive(),
+                  ),
                   child: Text(
-                    'Register',
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+                    S.of(context).register,
+                    style: TextStyle(
+                      fontSize: Dimens.d26.responsive(),
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(Dimens.d8.responsive()),
                   child: TextFormField(
                     controller: _nameController,
                     validator: _nameInputValidator,
-                    decoration: const InputDecoration(hintText: 'name'),
+                    decoration: InputDecoration(hintText: S.of(context).name),
                     keyboardType: TextInputType.name,
                     autofillHints: const [AutofillHints.name, AutofillHints.username],
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(Dimens.d8.responsive()),
                   child: TextFormField(
                     controller: _profilePictureController,
-                    decoration: const InputDecoration(hintText: 'picture URL'),
+                    decoration: InputDecoration(hintText: S.of(context).pictureUrl),
                     keyboardType: TextInputType.url,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _emailController,
-                    validator: _emailInputValidator,
-                    decoration: const InputDecoration(hintText: 'email'),
-                    keyboardType: TextInputType.emailAddress,
-                    autofillHints: const [AutofillHints.email],
-                  ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: EdgeInsets.all(Dimens.d8.responsive()),
+                      child: TextFormField(
+                        onChanged: (value) => bloc.add(AuthEvent.emailChanged(value)),
+                        validator: (_) => state.emailAddress.value.fold(
+                          (f) => f.maybeMap(
+                            empty: (_) => S.of(context).doNotEmpty,
+                            invalidEmail: (_) => S.of(context).invalidEmail,
+                            orElse: () => null,
+                          ),
+                          (r) => null,
+                        ),
+                        decoration: InputDecoration(hintText: S.of(context).email),
+                        keyboardType: TextInputType.emailAddress,
+                        autofillHints: const [AutofillHints.email],
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: EdgeInsets.all(Dimens.d8.responsive()),
+                      child: TextFormField(
+                        onChanged: (value) => bloc.add(AuthEvent.passwordChanged(value)),
+                        validator: (_) => state.password.value.fold(
+                          (f) => f.maybeMap(
+                            empty: (_) => S.of(context).doNotEmpty,
+                            shortPassword: (_) => S.of(context).shortPassword,
+                            orElse: () => null,
+                          ),
+                          (r) => null,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: S.of(context).password,
+                        ),
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        keyboardType: TextInputType.visiblePassword,
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: EdgeInsets.all(Dimens.d8.responsive()),
+                      child: state.isSubmitting
+                          ? const CircularProgressIndicator()
+                          : ElevatedButton(
+                              onPressed: _signUp,
+                              child: Text(S.of(context).signUp),
+                            ),
+                    );
+                  },
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _passwordController,
-                    validator: _passwordInputValidator,
-                    decoration: const InputDecoration(
-                      hintText: 'password',
-                    ),
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    keyboardType: TextInputType.visiblePassword,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: _signUp,
-                    child: const Text('Sign up'),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
-                  child: Divider(),
+                  padding: EdgeInsets.symmetric(vertical: Dimens.d16.responsive()),
+                  child: const Divider(),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account?', style: Theme.of(context).textTheme.subtitle2),
-                    const SizedBox(width: 8),
+                    Text(
+                      S.of(context).alreadyHaveAnAccount,
+                      style: Theme.of(context).textTheme.subtitle2,
+                    ),
+                    SizedBox(width: Dimens.d8.responsive()),
                     TextButton(
                       onPressed: () {
                         navigator.pop();
                       },
-                      child: const Text('Sign in'),
+                      child: Text(S.of(context).signIn),
                     ),
                   ],
                 ),
@@ -128,37 +187,13 @@ class _SignUpPageState extends BasePageState<SignUpPage, AuthBloc> {
 
   Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
-      commonBloc.add(const LoadingChanged(true));
-      await Future<dynamic>.delayed(const Duration(seconds: 2));
-      commonBloc.add(const LoadingChanged(false));
+      bloc.add(const AuthEvent.registerWithEmailAndPasswordPressed());
     }
   }
 
   String? _nameInputValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Cannot be empty';
-    }
-
-    return null;
-  }
-
-  String? _emailInputValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Cannot be empty';
-    }
-    if (!_emailRegex.hasMatch(value)) {
-      return 'Not a valid email';
-    }
-
-    return null;
-  }
-
-  String? _passwordInputValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Cannot be empty';
-    }
-    if (value.length <= 6) {
-      return 'Password needs to be longer than 6 characters';
+      return S.of(context).doNotEmpty;
     }
 
     return null;

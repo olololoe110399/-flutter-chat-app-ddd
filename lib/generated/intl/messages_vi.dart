@@ -24,13 +24,23 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "alreadyHaveAnAccount":
+            MessageLookupByLibrary.simpleMessage("Bạn đã có tài khoản?"),
         "calls": MessageLookupByLibrary.simpleMessage("Gọi"),
+        "chatter": MessageLookupByLibrary.simpleMessage("CHATTER"),
         "connecting": MessageLookupByLibrary.simpleMessage("Đang kết nối"),
         "contacts": MessageLookupByLibrary.simpleMessage("Danh bạ"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("Tạo tài khoản"),
+        "doNotEmpty":
+            MessageLookupByLibrary.simpleMessage("Không được bỏ trống"),
+        "email": MessageLookupByLibrary.simpleMessage("email"),
+        "invalidEmail":
+            MessageLookupByLibrary.simpleMessage("Email không đúng định dạng"),
         "lastOnline":
             MessageLookupByLibrary.simpleMessage("Lần cuối trực tuyến:"),
         "members": MessageLookupByLibrary.simpleMessage("Thành viên:"),
         "messages": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
+        "name": MessageLookupByLibrary.simpleMessage("name"),
         "noName": MessageLookupByLibrary.simpleMessage("Không có tên"),
         "notifications": MessageLookupByLibrary.simpleMessage("Thông báo"),
         "offline": MessageLookupByLibrary.simpleMessage("Ngoại tuyến"),
@@ -38,9 +48,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Ôi không, đã xảy ra lỗi."),
         "online": MessageLookupByLibrary.simpleMessage("Trực tuyến"),
         "onlineNow": MessageLookupByLibrary.simpleMessage("Đang trực tuyến"),
+        "password": MessageLookupByLibrary.simpleMessage("mật khẩu"),
+        "pictureUrl": MessageLookupByLibrary.simpleMessage("url ảnh"),
         "pleaseCheckYourConfigError": m0,
         "profile": MessageLookupByLibrary.simpleMessage("Trang cá nhân"),
+        "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "shortPassword": MessageLookupByLibrary.simpleMessage("Mật khẩu ngắn"),
+        "signIn": MessageLookupByLibrary.simpleMessage("Đăng nhập"),
         "signOut": MessageLookupByLibrary.simpleMessage("Đăng xuất"),
+        "signUp": MessageLookupByLibrary.simpleMessage("Đăng ký"),
         "soEmptyngoAndMessageSomeone": MessageLookupByLibrary.simpleMessage(
             "Chưa có tin nào.\nHãy nhắn tin cho ai đó."),
         "stories": MessageLookupByLibrary.simpleMessage("Bảng tin"),
@@ -49,6 +65,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "typeSomething":
             MessageLookupByLibrary.simpleMessage("Gõ gì đó tại đây..."),
         "typingMessage": MessageLookupByLibrary.simpleMessage("Nhập tin nhắn"),
-        "watchers": MessageLookupByLibrary.simpleMessage("Người theo dõi")
+        "watchers": MessageLookupByLibrary.simpleMessage("Người theo dõi"),
+        "welcomeBack": MessageLookupByLibrary.simpleMessage("Chào mừng trở lại")
       };
 }

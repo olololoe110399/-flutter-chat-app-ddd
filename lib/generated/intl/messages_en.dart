@@ -24,12 +24,22 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "alreadyHaveAnAccount":
+            MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "calls": MessageLookupByLibrary.simpleMessage("Calls"),
+        "cannotBeEmpty":
+            MessageLookupByLibrary.simpleMessage("Cannot be empty"),
+        "chatter": MessageLookupByLibrary.simpleMessage("CHATTER"),
         "connecting": MessageLookupByLibrary.simpleMessage("Connecting"),
         "contacts": MessageLookupByLibrary.simpleMessage("Contacts"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("Create account"),
+        "doNotEmpty": MessageLookupByLibrary.simpleMessage("Do not Empty"),
+        "email": MessageLookupByLibrary.simpleMessage("email"),
+        "invalidEmail": MessageLookupByLibrary.simpleMessage("Invalid Email"),
         "lastOnline": MessageLookupByLibrary.simpleMessage("Last online:"),
         "members": MessageLookupByLibrary.simpleMessage("Members:"),
         "messages": MessageLookupByLibrary.simpleMessage("Messages"),
+        "name": MessageLookupByLibrary.simpleMessage("name"),
         "noName": MessageLookupByLibrary.simpleMessage("No name"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
         "offline": MessageLookupByLibrary.simpleMessage("Offline"),
@@ -37,9 +47,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "Oh no, something went wrong. "),
         "online": MessageLookupByLibrary.simpleMessage("Online"),
         "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
+        "password": MessageLookupByLibrary.simpleMessage("password"),
+        "pictureUrl": MessageLookupByLibrary.simpleMessage("picture URL"),
         "pleaseCheckYourConfigError": m0,
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+        "register": MessageLookupByLibrary.simpleMessage("Register"),
+        "shortPassword": MessageLookupByLibrary.simpleMessage("short Password"),
+        "signIn": MessageLookupByLibrary.simpleMessage("Sign in"),
         "signOut": MessageLookupByLibrary.simpleMessage("Sign out"),
+        "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
         "soEmptyngoAndMessageSomeone": MessageLookupByLibrary.simpleMessage(
             "So empty.\nGo and message someone."),
         "stories": MessageLookupByLibrary.simpleMessage("Stories"),
@@ -48,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "typeSomething":
             MessageLookupByLibrary.simpleMessage("Type something..."),
         "typingMessage": MessageLookupByLibrary.simpleMessage("Typing message"),
-        "watchers": MessageLookupByLibrary.simpleMessage("watchers")
+        "watchers": MessageLookupByLibrary.simpleMessage("watchers"),
+        "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome back")
       };
 }

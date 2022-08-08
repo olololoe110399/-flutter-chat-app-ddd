@@ -19,5 +19,19 @@
   "watchers": "Người theo dõi",
   "online": "Trực tuyến",
   "lastOnline": "Lần cuối trực tuyến:",
-  "typingMessage": "Nhập tin nhắn"
+  "typingMessage": "Nhập tin nhắn",
+  "register": "Register",
+  "name": "name",
+  "pictureUrl": "url ảnh",
+  "doNotEmpty": "Không được bỏ trống",
+  "invalidEmail": "Email không đúng định dạng",
+  "email": "email",
+  "shortPassword": "Mật khẩu ngắn",
+  "password": "mật khẩu",
+  "signUp": "Đăng ký",
+  "alreadyHaveAnAccount": "Bạn đã có tài khoản?",
+  "signIn": "Đăng nhập",
+  "welcomeBack": "Chào mừng trở lại",
+  "createAccount": "Tạo tài khoản",
+  "chatter": "CHATTER"
 }

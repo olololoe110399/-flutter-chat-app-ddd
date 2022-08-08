@@ -9,4 +9,7 @@ class AppExceptionWrapper {
   final AppError appError;
 
   final Future<void> Function()? doOnRetry;
+
+  @override
+  String toString() => appError.toString();
 }

@@ -14,14 +14,14 @@ Flutter project using Domain-Driven Design and bloc pattern
 
 - cp env:
   - Run `cp .env.exampe .env`
-  - STREAM_KEY: get from <https://getstream.io/>
+  - STREAM_KEY: create projct and get stream key from <https://getstream.io/>
 - Gen env to `.vscode/launch.json`:
-  - Run  `make dart_definee`
+  - Run  `make dart_defines`
 - Firebase config:
   - Create project in here <https://console.firebase.google.com/>
   - Add Firebase to flutter app <https://firebase.google.com/docs/flutter/setup>
   - Enable Authentication and select and adding your first sign-in method is Email/Password Native providers
-  - Enable Functions
+  - Enable Functions and deploy
 
 ### Install
 
