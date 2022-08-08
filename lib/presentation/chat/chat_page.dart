@@ -1,94 +1,152 @@
+import 'dart:async';
+
+import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../../../application/application.dart';
-import '../../domain/domain.dart';
 import '../../presentation/presentation.dart';
 import '../../shared/shared.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatPage extends StatelessWidget {
   const ChatPage({
-    required this.messageEntity,
+    required this.channel,
     Key? key,
   }) : super(key: key);
 
-  final MessageEntity messageEntity;
+  final Channel channel;
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  Widget build(BuildContext context) {
+    return StreamChannel(
+      channel: channel,
+      child: const _ChatPage(),
+    );
+  }
 }
 
-class _ChatPageState extends BasePageState<ChatPage, ChatBloc> {
+class _ChatPage extends StatefulWidget {
+  const _ChatPage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<_ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends BasePageState<_ChatPage, ChatBloc> {
+  late StreamSubscription<int>? unreadCountSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    unreadCountSubscription = AppStreamChat.instance.channel?.state?.unreadCountStream.listen(
+      _unreadCountHandler,
+    );
+  }
+
+  @override
+  void dispose() {
+    unreadCountSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget buildPage(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: Theme.of(context).iconTheme,
-        centerTitle: false,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leadingWidth: Dimens.d54.responsive(),
-        leading: Align(
-          alignment: Alignment.centerRight,
-          child: IconBackground(
-            icon: CupertinoIcons.back,
-            onTap: () => navigator.pop(),
-          ),
-        ),
-        title: _AppBarTitle(
-          messageEntity: widget.messageEntity,
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Dimens.d8.responsive(),
+    AppStreamChat.ofChannel(context);
+
+    return GestureDetector(
+      onTap: () => ViewUtils.hideKeyboard(context),
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: Theme.of(context).iconTheme,
+          centerTitle: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leadingWidth: Dimens.d54.responsive(),
+          leading: Align(
+            alignment: Alignment.centerRight,
+            child: IconBackground(
+              icon: CupertinoIcons.back,
+              onTap: () => navigator.pop(),
             ),
-            child: Center(
-              child: IconBorder(
-                icon: CupertinoIcons.video_camera_solid,
-                onTap: () {},
+          ),
+          title: _AppBarTitle(
+            channel: AppStreamChat.instance.channel,
+            client: AppStreamChat.instance.client,
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Dimens.d8.responsive(),
+              ),
+              child: Center(
+                child: IconBorder(
+                  icon: CupertinoIcons.video_camera_solid,
+                  onTap: () {},
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: Dimens.d8.responsive(),
-            ),
-            child: Center(
-              child: IconBorder(
-                icon: CupertinoIcons.phone_solid,
-                onTap: () {},
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Dimens.d8.responsive(),
+              ),
+              child: Center(
+                child: IconBorder(
+                  icon: CupertinoIcons.phone_solid,
+                  onTap: () {},
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          const Expanded(
-            child: _DemoMessageList(),
-          ),
-          const _ActionBar(),
-        ],
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: MessageListCore(
+                loadingBuilder: (context) {
+                  return const Center(child: CircularProgressIndicator());
+                },
+                emptyBuilder: (context) => const SizedBox.shrink(),
+                errorBuilder: (context, error) => DisplayErrorMessage(error: error),
+                messageListBuilder: (context, messages) => _MessageList(messages: messages),
+              ),
+            ),
+            _ActionBar(
+              channel: AppStreamChat.instance.channel,
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _unreadCountHandler(int count) async {
+    if (count > 0) {
+      await AppStreamChat.instance.channel?.markRead();
+    }
   }
 }
 
 class _AppBarTitle extends StatelessWidget {
   const _AppBarTitle({
-    required this.messageEntity,
+    required this.channel,
+    required this.client,
     Key? key,
   }) : super(key: key);
 
-  final MessageEntity messageEntity;
+  final Channel? channel;
+  final StreamChatClient client;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Avatar.small(
-          url: messageEntity.profilePicture,
+          url: channel != null
+              ? ChannelUtils.getChannelImage(channel!, AppStreamChat.instance.currentUser)
+              : null,
         ),
         SizedBox(
           width: Dimens.d16.responsive(),
@@ -99,7 +157,9 @@ class _AppBarTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                messageEntity.senderName,
+                channel != null
+                    ? ChannelUtils.getChannelName(channel!, AppStreamChat.instance.currentUser)
+                    : '',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: Dimens.d14.responsive(),
@@ -108,45 +168,99 @@ class _AppBarTitle extends StatelessWidget {
               SizedBox(
                 height: Dimens.d2.responsive(),
               ),
-              Text(
-                S.of(context).onlineNow,
-                style: TextStyle(
-                  fontSize: Dimens.d10.responsive(),
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green,
-                ),
-              ),
+              if (channel != null) status(),
             ],
           ),
         ),
       ],
     );
   }
+
+  Widget status() {
+    return BetterStreamBuilder<List<Member>>(
+      stream: channel?.state?.membersStream,
+      initialData: channel?.state?.members,
+      builder: (context, data) => ConnectionStatusBuilder(
+        client: client,
+        statusBuilder: (context, status) {
+          switch (status) {
+            case ConnectionStatus.connected:
+              return _buildConnectedTitleState(context, data, channel!);
+            case ConnectionStatus.connecting:
+              return Text(
+                S.of(context).connecting,
+                style: TextStyle(
+                  fontSize: Dimens.d10.responsive(),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              );
+            case ConnectionStatus.disconnected:
+              return Text(
+                S.of(context).offline,
+                style: TextStyle(
+                  fontSize: Dimens.d10.responsive(),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              );
+            default:
+              return const SizedBox.shrink();
+          }
+        },
+      ),
+    );
+  }
 }
 
-class _DemoMessageList extends StatelessWidget {
-  const _DemoMessageList({Key? key}) : super(key: key);
+class _MessageList extends StatelessWidget {
+  const _MessageList({
+    required this.messages,
+    Key? key,
+  }) : super(key: key);
+
+  final List<Message> messages;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: Dimens.d8.responsive()),
-      child: ListView(
-        children: [
-          _DateLabel(
-            dateTime: DateTime.now().subtract(
-              const Duration(days: 1),
-            ),
-          ),
-          const _MessageTile(
-            message: 'hi',
-            messageDate: '12:0 PM',
-          ),
-          const _MessageOwnerTile(
-            message: 'hi, minhf laf duy',
-            messageDate: '12:0 PM',
-          ),
-        ],
+      padding: const EdgeInsets.all(8.0),
+      child: ListView.separated(
+        itemCount: messages.length + 1,
+        reverse: true,
+        separatorBuilder: (context, index) {
+          if (index == messages.length - 1) {
+            return _DateLabel(dateTime: messages[index].createdAt);
+          }
+          if (messages.length == 1) {
+            return const SizedBox.shrink();
+          } else if (index >= messages.length - 1) {
+            return const SizedBox.shrink();
+          } else if (index <= messages.length) {
+            final message = messages[index];
+            final nextMessage = messages[index + 1];
+
+            return DateTimeUtils.isNotSame(
+              message.createdAt,
+              nextMessage.createdAt,
+            )
+                ? _DateLabel(dateTime: message.createdAt)
+                : const SizedBox.shrink();
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
+        itemBuilder: (context, index) {
+          if (index < messages.length) {
+            final message = messages[index];
+
+            return message.user?.id == AppStreamChat.instance.currentUser?.id
+                ? _MessageOwnTitle(message: message)
+                : _MessageTitle(message: message);
+          } else {
+            return const SizedBox.shrink();
+          }
+        },
       ),
     );
   }
@@ -203,15 +317,13 @@ class __DateLabelState extends State<_DateLabel> {
   }
 }
 
-class _MessageTile extends StatelessWidget {
-  const _MessageTile({
+class _MessageTitle extends StatelessWidget {
+  const _MessageTitle({
     required this.message,
-    required this.messageDate,
     Key? key,
   }) : super(key: key);
 
-  final String message;
-  final String messageDate;
+  final Message message;
 
   static const _borderRadius = 26.0;
 
@@ -239,13 +351,13 @@ class _MessageTile extends StatelessWidget {
                   horizontal: Dimens.d12.responsive(),
                   vertical: Dimens.d20.responsive(),
                 ),
-                child: Text(message),
+                child: Text(message.text ?? ''),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(top: Dimens.d8.responsive()),
               child: Text(
-                messageDate,
+                DateTimeUtils.jm(message.createdAt),
                 style: TextStyle(
                   color: AppColors.textFaded,
                   fontSize: Dimens.d10.responsive(),
@@ -260,15 +372,13 @@ class _MessageTile extends StatelessWidget {
   }
 }
 
-class _MessageOwnerTile extends StatelessWidget {
-  const _MessageOwnerTile({
+class _MessageOwnTitle extends StatelessWidget {
+  const _MessageOwnTitle({
     required this.message,
-    required this.messageDate,
     Key? key,
   }) : super(key: key);
 
-  final String message;
-  final String messageDate;
+  final Message message;
 
   static const _borderRadius = 26.0;
 
@@ -297,7 +407,7 @@ class _MessageOwnerTile extends StatelessWidget {
                   vertical: Dimens.d20.responsive(),
                 ),
                 child: Text(
-                  message,
+                  message.text ?? '',
                   style: const TextStyle(
                     color: AppColors.textLigth,
                   ),
@@ -307,7 +417,7 @@ class _MessageOwnerTile extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: Dimens.d8.responsive()),
               child: Text(
-                messageDate,
+                DateTimeUtils.jm(message.createdAt),
                 style: TextStyle(
                   color: AppColors.textFaded,
                   fontSize: Dimens.d10.responsive(),
@@ -323,13 +433,35 @@ class _MessageOwnerTile extends StatelessWidget {
 }
 
 class _ActionBar extends StatefulWidget {
-  const _ActionBar({Key? key}) : super(key: key);
+  const _ActionBar({
+    required this.channel,
+    Key? key,
+  }) : super(key: key);
+
+  final Channel? channel;
 
   @override
   __ActionBarState createState() => __ActionBarState();
 }
 
 class __ActionBarState extends State<_ActionBar> {
+  final StreamMessageInputController controller = StreamMessageInputController();
+
+  Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(_onTextChange);
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(_onTextChange);
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -341,7 +473,7 @@ class __ActionBarState extends State<_ActionBar> {
             decoration: BoxDecoration(
               border: Border(
                 right: BorderSide(
-                  width: 2,
+                  width: Dimens.d2.responsive(),
                   color: Theme.of(context).dividerColor,
                 ),
               ),
@@ -361,7 +493,8 @@ class __ActionBarState extends State<_ActionBar> {
                 left: Dimens.d16.responsive(),
               ),
               child: TextField(
-                onChanged: (val) {},
+                controller: controller.textEditingController,
+                onChanged: (val) => controller.text = val,
                 style: TextStyle(fontSize: Dimens.d14.responsive()),
                 decoration: InputDecoration(
                   hintText: S.of(context).typeSomething,
@@ -387,5 +520,122 @@ class __ActionBarState extends State<_ActionBar> {
     );
   }
 
-  Future<void> _sendMessage() async {}
+  void _onTextChange() {
+    if (_debounce?.isActive ?? false) {
+      _debounce?.cancel();
+    }
+    _debounce = Timer(const Duration(seconds: 1), () {
+      if (mounted) {
+        widget.channel?.keyStroke();
+      }
+    });
+  }
+
+  Future<void> _sendMessage() async {
+    if (controller.text.isNotEmpty) {
+      await widget.channel?.sendMessage(controller.message);
+      controller.clear();
+      ViewUtils.hideKeyboard(context);
+    }
+  }
+}
+
+Widget _buildConnectedTitleState(
+  BuildContext context,
+  List<Member>? members,
+  Channel channel,
+) {
+  Widget? alternativeWidget;
+  final memberCount = channel.memberCount;
+  if (memberCount != null && memberCount > 2) {
+    var text = '${S.of(context).members}: $memberCount';
+    final watcherCount = channel.state?.watcherCount ?? 0;
+    if (watcherCount > 0) {
+      text = '${S.of(context).watchers} $watcherCount';
+    }
+    alternativeWidget = Text(
+      text,
+    );
+  } else {
+    final userId = StreamChatCore.of(context).currentUser?.id;
+    final Member? otherMember = members?.firstOrNullWhere(
+      (element) => element.userId != userId,
+    );
+
+    if (otherMember != null) {
+      alternativeWidget = otherMember.user?.online == true
+          ? Text(
+              S.of(context).online,
+              style: TextStyle(
+                fontSize: Dimens.d10.responsive(),
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            )
+          : Text(
+              '${S.of(context).lastOnline} '
+              '${DateTimeUtils.fromNow(otherMember.user?.lastActive)}',
+              style: TextStyle(
+                fontSize: Dimens.d10.responsive(),
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            );
+    }
+  }
+
+  return _TypingIndicator(
+    alternativeWidget: alternativeWidget,
+    channel: channel,
+  );
+}
+
+class _TypingIndicator extends StatelessWidget {
+  const _TypingIndicator({
+    required this.channel,
+    Key? key,
+    this.alternativeWidget,
+  }) : super(key: key);
+
+  final Widget? alternativeWidget;
+
+  final Channel channel;
+
+  @override
+  Widget build(BuildContext context) {
+    final channelState = channel.state!;
+
+    final altWidget = alternativeWidget ?? const SizedBox.shrink();
+
+    return BetterStreamBuilder<Iterable<User>>(
+      initialData: channelState.typingEvents.keys,
+      stream: channelState.typingEventsStream.map((typings) => typings.entries.map((e) => e.key)),
+      builder: (context, data) {
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: data.isNotEmpty
+                ? Align(
+                    alignment: Alignment.centerLeft,
+                    key: const ValueKey('typing-text'),
+                    child: Text(
+                      S.of(context).typingMessage,
+                      maxLines: 1,
+                      style: TextStyle(
+                        fontSize: Dimens.d10.responsive(),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : Align(
+                    alignment: Alignment.centerLeft,
+                    key: const ValueKey('altwidget'),
+                    child: altWidget,
+                  ),
+          ),
+        );
+      },
+    );
+  }
 }

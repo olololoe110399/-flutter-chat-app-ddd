@@ -47,9 +47,7 @@ class _ContactsPageState extends BasePageState<ContactsPage, ContactsBloc> {
                   final user = users.elementAtOrNull(index);
 
                   return InkWell(
-                    onTap: () {
-                      createChannel(user);
-                    },
+                    onTap: () => createChannel(user),
                     child: ListTile(
                       leading: Avatar.small(url: user?.image),
                       title: Text(user?.name ?? ''),
@@ -71,14 +69,14 @@ class _ContactsPageState extends BasePageState<ContactsPage, ContactsBloc> {
   }
 
   Future<void> createChannel(User? user) async {
-    final channel = AppStreamChat.instance.streamChatCoreState.client
-        .channel(AppStreamChat.messagingChannel, extraData: {
+    final channel =
+        AppStreamChat.instance.client.channel(AppStreamChat.messagingChannel, extraData: {
       AppStreamChat.membersExtraData: [
         AppStreamChat.instance.currentUser?.id,
         user?.id,
       ],
     });
     await channel.watch();
-    navigator.tabsRouter?.setActiveIndex(0);
+    await navigator.push(ChatRoute(channel: channel));
   }
 }

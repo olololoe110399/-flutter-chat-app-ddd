@@ -19,6 +19,8 @@ class _MainPageState extends BasePageState<MainPage, MainBloc> {
     return AutoTabsScaffold(
       routes: navigator.tabsRoutes,
       appBarBuilder: (context, tabsRouter) {
+        navigator.tabsRouter = tabsRouter;
+
         return AppBar(
           iconTheme: Theme.of(context).iconTheme,
           backgroundColor: Colors.transparent,
