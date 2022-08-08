@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        flutter-channel: [ 'stable', 'beta' ]
+        flutter-channel: [ 'stable' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +43,14 @@ jobs:
         uses: dart-code-checker/dart-code-metrics-action@v2
         with: 
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Gen file google-services.json
+        run: echo "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > android/app/google-services.json
+
+      - name: Gen file GoogleService-Info.plist
+        run: echo "${{ secrets.GOOGLE_SERVICES_INFO }}" | base64 --decode > ios/GoogleService-Info.plist
+
+      - run: echo "${{ secrets.GOOGLE_SERVICES_INFO }}" | base64 --decode > ios/Runner/GoogleService-Info.plist
 
       - name: Build APK
         run: flutter build apk --no-shrink

@@ -12,6 +12,7 @@ analyzer:
     - "**/test/.dart"
     - "**/generated/**"
     - ".dart_tool/**"
+    - "**/firebase_options.dart"
   strong-mode:
     implicit-casts: true
     implicit-dynamic: false

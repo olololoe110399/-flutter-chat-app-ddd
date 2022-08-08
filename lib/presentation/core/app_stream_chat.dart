@@ -76,7 +76,12 @@ class AppStreamChat {
     streamChatCoreState.client.disconnectUser();
   }
 
-  void connectUser() {
-    client.connectUser(User(id: 'duynn'), client.devToken('duynn').rawValue);
-  }
+  void connectUser({
+    required String token,
+    required String id,
+  }) =>
+      client.connectUser(
+        User(id: id),
+        token,
+      );
 }
