@@ -13,6 +13,10 @@ import '../../presentation.dart';
       page: ChatPage,
       initial: true,
     ),
+    AutoRoute<dynamic>(
+      page: ProfilePage,
+      initial: true,
+    ),
     mainRouter,
   ],
 )

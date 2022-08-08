@@ -1,11 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../presentation/presentation.dart';
+import '../../shared/shared.dart';
 import '../common/common.dart';
 import 'core.dart';
 
 abstract class BaseBloc<E extends BaseBlocEvent, S extends BaseBlocState>
-    extends BaseBlocDelegete<E, S> with BaseBlocMixin {
+    extends BaseBlocDelegete<E, S> with BaseBlocMixin, LogMixin {
   BaseBloc(S initialState) : super(initialState);
 }
 

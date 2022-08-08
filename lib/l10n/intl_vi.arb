@@ -5,5 +5,11 @@
   "calls": "Gọi",
   "stories": "Bảng tin",
   "typeSomething": "Gõ gì đó tại đây...",
-  "onlineNow": "Đang trực tuyến"
+  "onlineNow": "Đang trực tuyến",
+  "noName": "Không có tên",
+  "signOut": "Đăng xuất",
+  "profile": "Trang cá nhân",
+  "thereAreNotUsers": "Không có người dùng",
+  "ohNoSomethingWentWrong": "Ôi không, đã xảy ra lỗi.",
+  "pleaseCheckYourConfigError": "Vui lòng kiểm tra cấu hình của bạn:\n {error}"
 }

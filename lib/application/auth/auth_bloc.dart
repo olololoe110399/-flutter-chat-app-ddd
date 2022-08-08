@@ -8,7 +8,7 @@ import '../core/core.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
-@LazySingleton()
+@Injectable()
 class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
   AuthBloc(this._auth) : super(const AuthState.initial()) {
     on<AuthCheckRequested>(onAuthCheckRequested);

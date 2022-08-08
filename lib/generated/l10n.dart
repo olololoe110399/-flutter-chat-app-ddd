@@ -119,6 +119,66 @@ class S {
       args: [],
     );
   }
+
+  /// `No name`
+  String get noName {
+    return Intl.message(
+      'No name',
+      name: 'noName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign out`
+  String get signOut {
+    return Intl.message(
+      'Sign out',
+      name: 'signOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile`
+  String get profile {
+    return Intl.message(
+      'Profile',
+      name: 'profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are not users`
+  String get thereAreNotUsers {
+    return Intl.message(
+      'There are not users',
+      name: 'thereAreNotUsers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oh no, something went wrong. `
+  String get ohNoSomethingWentWrong {
+    return Intl.message(
+      'Oh no, something went wrong. ',
+      name: 'ohNoSomethingWentWrong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please check your config:\n {error}`
+  String pleaseCheckYourConfigError(Object error) {
+    return Intl.message(
+      'Please check your config:\n $error',
+      name: 'pleaseCheckYourConfigError',
+      desc: '',
+      args: [error],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
