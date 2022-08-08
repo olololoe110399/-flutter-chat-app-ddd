@@ -22,10 +22,7 @@ class IAuthImpl implements IAuth {
       final user = _firebaseAuth.currentUser;
 
       if (user != null) {
-        final callable =
-            _firebaseFunctions.httpsCallable('ext-auth-chat-getStreamUserToken').call<String>();
-
-        final results = await callable;
+        final results = await _firebaseFunctions.httpsCallable('getStreamUserToken').call<String>();
         // authenticated
 
         return right(
@@ -42,6 +39,82 @@ class IAuthImpl implements IAuth {
           optionOf(null),
         );
       }
+    } catch (e) {
+      return left(ErrorMapperFactory.map(e));
+    }
+  }
+
+  @override
+  Future<Result<Option<AuthEntity>>> registerWithEmailAndPassword({
+    required EmailAddress emailAddress,
+    required Password password,
+  }) async {
+    try {
+      final emailAddressStr = emailAddress.getOrCrash();
+      final passwordStr = password.getOrCrash();
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: emailAddressStr,
+        password: passwordStr,
+      );
+
+      if (userCredential.user != null) {
+        final results = await _firebaseFunctions.httpsCallable('getStreamUserToken').call<String>();
+
+        return right(
+          optionOf(
+            AuthEntity(
+              token: results.data,
+              user: userCredential.user!,
+            ),
+          ),
+        );
+      }
+
+      return right(optionOf(null));
+    } catch (e) {
+      return left(ErrorMapperFactory.map(e));
+    }
+  }
+
+  @override
+  Future<Result<Option<AuthEntity>>> signInWithEmailAndPassword({
+    required EmailAddress emailAddress,
+    required Password password,
+  }) async {
+    try {
+      final emailAddressStr = emailAddress.getOrCrash();
+      final passwordStr = password.getOrCrash();
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
+        email: emailAddressStr,
+        password: passwordStr,
+      );
+
+      if (userCredential.user != null) {
+        // Get Stream user token from Firebase Functions
+        final results = await _firebaseFunctions.httpsCallable('getStreamUserToken').call<String>();
+
+        return right(
+          optionOf(
+            AuthEntity(
+              token: results.data,
+              user: userCredential.user!,
+            ),
+          ),
+        );
+      }
+
+      return right(optionOf(null));
+    } catch (e) {
+      return left(ErrorMapperFactory.map(e));
+    }
+  }
+
+  @override
+  Future<UnitResult> signOnut() async {
+    try {
+      await _firebaseAuth.signOut();
+
+      return right(unit);
     } catch (e) {
       return left(ErrorMapperFactory.map(e));
     }

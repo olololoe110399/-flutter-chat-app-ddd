@@ -11,14 +11,14 @@ class HandleException {
     ErrorListener errorListener,
   ) async {
     switch (appExceptionWrapper.appError.appExceptionType) {
-      case AppExceptionType.remote:
-        return errorListener.onRemote(appExceptionWrapper, context);
-      case AppExceptionType.local:
-        return errorListener.onLocal(appExceptionWrapper, context);
       case AppExceptionType.noInternet:
         return errorListener.onNoInternet(appExceptionWrapper, context);
       case AppExceptionType.uncaugth:
         return errorListener.onUncaugth(appExceptionWrapper, context);
+      case AppExceptionType.firebaseAuth:
+        return errorListener.onFirebaseAuthException(appExceptionWrapper, context);
+      case AppExceptionType.firebaseFunctions:
+        return errorListener.onFirebaseFunctionsException(appExceptionWrapper, context);
       default:
         return errorListener.onUncaugth(appExceptionWrapper, context);
     }

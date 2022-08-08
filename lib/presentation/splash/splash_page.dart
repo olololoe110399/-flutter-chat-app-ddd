@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../../application/application.dart';
 import '../presentation.dart';
@@ -23,19 +24,22 @@ class _SplashPageState extends BasePageState<SplashPage, AuthBloc> {
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthBloc, AuthState>(
-          listenWhen: (previous, current) => previous != current,
           listener: (context, state) {
-            state.map(
-              initial: (_) {},
-              authenticated: (auth) {
-                AppStreamChat.instance.connectUser(
-                  id: auth.authEntity.user.uid,
-                  token: auth.authEntity.token,
+            state.authenticated.fold(
+              () => navigator.replace(
+                const SignInRoute(),
+              ),
+              (f) {
+                f.fold(
+                  () => navigator.replace(const SignInRoute()),
+                  (authEntity) {
+                    AppStreamChat.instance.connectUser(
+                      user: User(id: authEntity.user.uid),
+                      token: authEntity.token,
+                    );
+                    navigator.replace(const MainRoute());
+                  },
                 );
-                navigator.replace(const MainRoute());
-              },
-              unauthenticated: (_) {
-                navigator.replace(const SignInRoute());
               },
             );
           },

@@ -27,7 +27,13 @@ class AppError {
           error == other.error;
 }
 
-enum AppExceptionType { remote, local, uncaugth, noInternet }
+enum AppExceptionType {
+  uncaugth,
+  noInternet,
+  unexpectedValueError,
+  firebaseAuth,
+  firebaseFunctions,
+}
 
 typedef Result<T> = Either<AppError, T>;
 typedef UnitResult = Result<Unit>;

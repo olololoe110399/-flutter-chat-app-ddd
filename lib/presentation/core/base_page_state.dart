@@ -8,7 +8,7 @@ import '../../presentation/presentation.dart';
 import '../../shared/shared.dart';
 
 abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
-    extends BasePageStateDelegete<T, B> with ErrorListenerMixin, LogMixin {
+    extends BasePageStateDelegete<T, B> with ErrorListenerMixin {
   @override
   Widget buildPageListener({required Widget child}) {
     return BlocListener<CommonBloc, CommonState>(
@@ -26,7 +26,7 @@ abstract class BasePageState<T extends StatefulWidget, B extends BaseBloc>
 }
 
 abstract class BasePageStateDelegete<T extends StatefulWidget, B extends BaseBloc> extends State<T>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, LogMixin {
   late final AppNavigator navigator = getIt.get<AppNavigator>();
   late final HandleException handleException = HandleException();
   late final CommonBloc commonBloc = getIt.get<CommonBloc>();

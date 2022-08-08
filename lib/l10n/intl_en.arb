@@ -19,5 +19,20 @@
   "watchers": "watchers",
   "online": "Online",
   "lastOnline": "Last online:",
-  "typingMessage": "Typing message"
+  "typingMessage": "Typing message",
+  "register": "Register",
+  "name": "name",
+  "pictureUrl": "picture URL",
+  "doNotEmpty": "Do not Empty",
+  "invalidEmail": "Invalid Email",
+  "email": "email",
+  "shortPassword": "short Password",
+  "password": "password",
+  "signUp": "Sign up",
+  "alreadyHaveAnAccount": "Already have an account?",
+  "signIn": "Sign in",
+  "cannotBeEmpty": "Cannot be empty",
+  "welcomeBack": "Welcome back",
+  "createAccount": "Create account",
+  "chatter": "CHATTER"
 }

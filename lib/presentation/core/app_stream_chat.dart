@@ -78,10 +78,10 @@ class AppStreamChat {
 
   void connectUser({
     required String token,
-    required String id,
+    required User user,
   }) =>
       client.connectUser(
-        User(id: id),
+        user,
         token,
       );
 }

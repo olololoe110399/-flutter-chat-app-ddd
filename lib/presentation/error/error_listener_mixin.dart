@@ -7,17 +7,36 @@ import 'error.dart';
 mixin ErrorListenerMixin<T extends StatefulWidget, B extends BaseBloc>
     on BasePageStateDelegete<T, B> implements ErrorListener {
   @override
-  void onRemote(AppExceptionWrapper appExceptionWrapper, BuildContext context) {}
+  void onNoInternet(
+    AppExceptionWrapper appExceptionWrapper,
+    BuildContext context,
+  ) {
+    logE(appExceptionWrapper.toString());
+  }
 
   @override
-  void onLocal(AppExceptionWrapper appExceptionWrapper, BuildContext context) {}
+  void onUncaugth(
+    AppExceptionWrapper appExceptionWrapper,
+    BuildContext context,
+  ) {
+    logE(appExceptionWrapper.toString());
+  }
 
   @override
-  void onUncauth(AppExceptionWrapper appExceptionWrapper, BuildContext context) {}
+  void onFirebaseAuthException(
+    AppExceptionWrapper appExceptionWrapper,
+    BuildContext context,
+  ) {
+    navigator.showErrorSnackBar(appExceptionWrapper.appError.message);
+    logE(appExceptionWrapper.toString());
+  }
 
   @override
-  void onNoInternet(AppExceptionWrapper appExceptionWrapper, BuildContext context) {}
-
-  @override
-  void onUncaugth(AppExceptionWrapper appExceptionWrapper, BuildContext context) {}
+  void onFirebaseFunctionsException(
+    AppExceptionWrapper appExceptionWrapper,
+    BuildContext context,
+  ) {
+    navigator.showErrorSnackBar(appExceptionWrapper.appError.message);
+    logE(appExceptionWrapper.toString());
+  }
 }

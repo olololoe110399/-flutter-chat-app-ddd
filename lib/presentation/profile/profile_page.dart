@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../application/application.dart';
 import '../../shared/shared.dart';
@@ -12,8 +13,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends BasePageState<ProfilePage, AuthBloc> {
-  bool _loading = false;
-
   @override
   Widget buildPage(BuildContext context) {
     final user = AppStreamChat.instance.currentUser;
@@ -40,12 +39,16 @@ class _ProfilePageState extends BasePageState<ProfilePage, AuthBloc> {
               child: Text(user?.name ?? S.of(context).noName),
             ),
             const Divider(),
-            _loading
-                ? const CircularProgressIndicator()
-                : TextButton(
-                    onPressed: _signOut,
-                    child: Text(S.of(context).signOut),
-                  ),
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                return state.isSubmitting
+                    ? const CircularProgressIndicator()
+                    : TextButton(
+                        onPressed: _signOut,
+                        child: Text(S.of(context).signOut),
+                      );
+              },
+            ),
           ],
         ),
       ),
@@ -53,18 +56,11 @@ class _ProfilePageState extends BasePageState<ProfilePage, AuthBloc> {
   }
 
   Future<void> _signOut() async {
-    setState(() {
-      _loading = true;
-    });
     try {
       AppStreamChat.instance.disconnectUser();
-      await navigator.pop();
-      await navigator.replace(const SplashRoute());
+      bloc.add(const AuthEvent.signedOut());
     } on Exception catch (e, st) {
       logE(e, stackTrace: st);
-      setState(() {
-        _loading = false;
-      });
     }
   }
 }
