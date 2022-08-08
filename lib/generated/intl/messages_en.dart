@@ -25,20 +25,29 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "calls": MessageLookupByLibrary.simpleMessage("Calls"),
+        "connecting": MessageLookupByLibrary.simpleMessage("Connecting"),
         "contacts": MessageLookupByLibrary.simpleMessage("Contacts"),
+        "lastOnline": MessageLookupByLibrary.simpleMessage("Last online:"),
+        "members": MessageLookupByLibrary.simpleMessage("Members:"),
         "messages": MessageLookupByLibrary.simpleMessage("Messages"),
         "noName": MessageLookupByLibrary.simpleMessage("No name"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "offline": MessageLookupByLibrary.simpleMessage("Offline"),
         "ohNoSomethingWentWrong": MessageLookupByLibrary.simpleMessage(
             "Oh no, something went wrong. "),
+        "online": MessageLookupByLibrary.simpleMessage("Online"),
         "onlineNow": MessageLookupByLibrary.simpleMessage("Online now"),
         "pleaseCheckYourConfigError": m0,
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "signOut": MessageLookupByLibrary.simpleMessage("Sign out"),
+        "soEmptyngoAndMessageSomeone": MessageLookupByLibrary.simpleMessage(
+            "So empty.\nGo and message someone."),
         "stories": MessageLookupByLibrary.simpleMessage("Stories"),
         "thereAreNotUsers":
             MessageLookupByLibrary.simpleMessage("There are not users"),
         "typeSomething":
-            MessageLookupByLibrary.simpleMessage("Type something...")
+            MessageLookupByLibrary.simpleMessage("Type something..."),
+        "typingMessage": MessageLookupByLibrary.simpleMessage("Typing message"),
+        "watchers": MessageLookupByLibrary.simpleMessage("watchers")
       };
 }

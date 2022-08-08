@@ -28,6 +28,7 @@ class _SplashPageState extends BasePageState<SplashPage, AuthBloc> {
             state.map(
               initial: (_) {},
               authenticated: (_) {
+                AppStreamChat.instance.connectUser();
                 navigator.replace(const MainRoute());
               },
               unauthenticated: (_) {

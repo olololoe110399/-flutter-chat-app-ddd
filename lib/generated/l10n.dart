@@ -179,6 +179,86 @@ class S {
       args: [error],
     );
   }
+
+  /// `So empty.\nGo and message someone.`
+  String get soEmptyngoAndMessageSomeone {
+    return Intl.message(
+      'So empty.\nGo and message someone.',
+      name: 'soEmptyngoAndMessageSomeone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connecting`
+  String get connecting {
+    return Intl.message(
+      'Connecting',
+      name: 'connecting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offline`
+  String get offline {
+    return Intl.message(
+      'Offline',
+      name: 'offline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Members:`
+  String get members {
+    return Intl.message(
+      'Members:',
+      name: 'members',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `watchers`
+  String get watchers {
+    return Intl.message(
+      'watchers',
+      name: 'watchers',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Online`
+  String get online {
+    return Intl.message(
+      'Online',
+      name: 'online',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last online:`
+  String get lastOnline {
+    return Intl.message(
+      'Last online:',
+      name: 'lastOnline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Typing message`
+  String get typingMessage {
+    return Intl.message(
+      'Typing message',
+      name: 'typingMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

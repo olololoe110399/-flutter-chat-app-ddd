@@ -11,5 +11,13 @@
   "profile": "Profile",
   "thereAreNotUsers": "There are not users",
   "ohNoSomethingWentWrong": "Oh no, something went wrong. ",
-  "pleaseCheckYourConfigError": "Please check your config:\n {error}"
+  "pleaseCheckYourConfigError": "Please check your config:\n {error}",
+  "soEmptyngoAndMessageSomeone": "So empty.\nGo and message someone.",
+  "connecting": "Connecting",
+  "offline": "Offline",
+  "members": "Members:",
+  "watchers": "watchers",
+  "online": "Online",
+  "lastOnline": "Last online:",
+  "typingMessage": "Typing message"
 }

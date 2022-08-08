@@ -11,5 +11,13 @@
   "profile": "Trang cá nhân",
   "thereAreNotUsers": "Không có người dùng",
   "ohNoSomethingWentWrong": "Ôi không, đã xảy ra lỗi.",
-  "pleaseCheckYourConfigError": "Vui lòng kiểm tra cấu hình của bạn:\n {error}"
+  "pleaseCheckYourConfigError": "Vui lòng kiểm tra cấu hình của bạn:\n {error}",
+  "soEmptyngoAndMessageSomeone": "Chưa có tin nào.\nHãy nhắn tin cho ai đó.",
+  "connecting": "Đang kết nối",
+  "offline": "Ngoại tuyến",
+  "members": "Thành viên:",
+  "watchers": "Người theo dõi",
+  "online": "Trực tuyến",
+  "lastOnline": "Lần cuối trực tuyến:",
+  "typingMessage": "Nhập tin nhắn"
 }

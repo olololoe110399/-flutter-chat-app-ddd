@@ -25,20 +25,30 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "calls": MessageLookupByLibrary.simpleMessage("Gọi"),
+        "connecting": MessageLookupByLibrary.simpleMessage("Đang kết nối"),
         "contacts": MessageLookupByLibrary.simpleMessage("Danh bạ"),
+        "lastOnline":
+            MessageLookupByLibrary.simpleMessage("Lần cuối trực tuyến:"),
+        "members": MessageLookupByLibrary.simpleMessage("Thành viên:"),
         "messages": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
         "noName": MessageLookupByLibrary.simpleMessage("Không có tên"),
         "notifications": MessageLookupByLibrary.simpleMessage("Thông báo"),
+        "offline": MessageLookupByLibrary.simpleMessage("Ngoại tuyến"),
         "ohNoSomethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Ôi không, đã xảy ra lỗi."),
+        "online": MessageLookupByLibrary.simpleMessage("Trực tuyến"),
         "onlineNow": MessageLookupByLibrary.simpleMessage("Đang trực tuyến"),
         "pleaseCheckYourConfigError": m0,
         "profile": MessageLookupByLibrary.simpleMessage("Trang cá nhân"),
         "signOut": MessageLookupByLibrary.simpleMessage("Đăng xuất"),
+        "soEmptyngoAndMessageSomeone": MessageLookupByLibrary.simpleMessage(
+            "Chưa có tin nào.\nHãy nhắn tin cho ai đó."),
         "stories": MessageLookupByLibrary.simpleMessage("Bảng tin"),
         "thereAreNotUsers":
             MessageLookupByLibrary.simpleMessage("Không có người dùng"),
         "typeSomething":
-            MessageLookupByLibrary.simpleMessage("Gõ gì đó tại đây...")
+            MessageLookupByLibrary.simpleMessage("Gõ gì đó tại đây..."),
+        "typingMessage": MessageLookupByLibrary.simpleMessage("Nhập tin nhắn"),
+        "watchers": MessageLookupByLibrary.simpleMessage("Người theo dõi")
       };
 }
