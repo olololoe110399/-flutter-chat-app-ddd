@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -21,10 +22,19 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
     AuthCheckRequested event,
     Emitter<AuthState> emit,
   ) async {
-    await runBlocCatching(
-      _auth.stateAuthenticated(),
-      doOnSuccess: (_) => emit(const AuthState.authenticated()),
-      doOnError: (_) => emit(const AuthState.unauthenticated()),
+    await runBlocCatching<Option<AuthEntity>>(
+      _auth.getSignedInUser(),
+      doOnSuccess: (auth) {
+        auth.fold(
+          () => emit(const AuthState.unauthenticated()),
+          (value) => emit(
+            AuthState.authenticated(authEntity: value),
+          ),
+        );
+      },
+      doOnError: (_) => emit(
+        const AuthState.unauthenticated(),
+      ),
     );
   }
 

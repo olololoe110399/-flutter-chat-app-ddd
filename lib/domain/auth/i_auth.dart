@@ -1,5 +1,7 @@
+import 'package:dartz/dartz.dart';
+
 import '../domain.dart';
 
 abstract class IAuth {
-  Future<UnitResult> stateAuthenticated();
+  Future<Result<Option<AuthEntity>>> getSignedInUser();
 }

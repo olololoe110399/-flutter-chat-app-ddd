@@ -17,6 +17,14 @@ import '../../presentation.dart';
       page: ProfilePage,
       initial: true,
     ),
+    AutoRoute<dynamic>(
+      page: SignInPage,
+      initial: true,
+    ),
+    AutoRoute<dynamic>(
+      page: SignUpPage,
+      initial: true,
+    ),
     mainRouter,
   ],
 )

@@ -65,3 +65,7 @@ app/ios/*ExportOptions.plist
 
 # env
 .env
+
+# firebase
+**/google-services.json
+**/GoogleService-Info.plist

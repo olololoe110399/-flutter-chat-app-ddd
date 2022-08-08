@@ -11,7 +11,7 @@ pub_get:
 	flutter pub get
 
 format:
-	find ./lib -name "*.dart" ! -name "*.g.dart" ! -name "*.freezed.dart" ! -name "*.gr.dart" ! -name "*.config.dart" ! -name "*.mocks.dart" ! -path '*/generated/*' ! -path '.dart_tool/**' | tr '\n' ' ' | xargs flutter format --set-exit-if-changed -l 100
+	find ./lib -name "*.dart" ! -name "*.g.dart" ! -name "*.freezed.dart" ! -name "*.gr.dart" ! -name "*.config.dart" ! -name "*.mocks.dart" ! -name "*/firebase_options.dart" ! -path '*/generated/*' ! -path '.dart_tool/**' | tr '\n' ' ' | xargs flutter format --set-exit-if-changed -l 100
 
 analyze: 
 	flutter analyze --no-pub --suppress-analytics lib

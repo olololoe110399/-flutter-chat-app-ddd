@@ -27,12 +27,15 @@ class _SplashPageState extends BasePageState<SplashPage, AuthBloc> {
           listener: (context, state) {
             state.map(
               initial: (_) {},
-              authenticated: (_) {
-                AppStreamChat.instance.connectUser();
+              authenticated: (auth) {
+                AppStreamChat.instance.connectUser(
+                  id: auth.authEntity.user.uid,
+                  token: auth.authEntity.token,
+                );
                 navigator.replace(const MainRoute());
               },
               unauthenticated: (_) {
-                // navigator.replace(const SignInRoute());
+                navigator.replace(const SignInRoute());
               },
             );
           },
