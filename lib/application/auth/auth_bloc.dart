@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/domain.dart';
@@ -17,6 +19,11 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
     on<SignedOut>(onSignedOut);
     on<EmailChanged>(onEmailChanged);
     on<PasswordChanged>(onPasswordChanged);
+    on<NameChanged>(onNameChanged);
+    on<PickImage>(
+      onPickImage,
+      transformer: throttleTime(),
+    );
     on<RegisterWithEmailAndPasswordPressed>(onRegisterWithEmailAndPasswordPressed);
     on<SignInWithEmailAndPasswordPressed>(onSignInWithEmailAndPasswordPressed);
   }
@@ -82,13 +89,49 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
     );
   }
 
+  Future<void> onNameChanged(
+    NameChanged event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        name: Name(event.nameStr),
+      ),
+    );
+  }
+
+  Future<void> onPickImage(
+    PickImage event,
+    Emitter<AuthState> emit,
+  ) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? pickedFile = await imagePicker
+        .pickImage(
+      source: ImageSource.gallery,
+    )
+        .catchError(
+      (dynamic error) {
+        logE(error);
+        navigator.showErrorSnackBar(error.toString());
+      },
+    );
+    if (pickedFile != null) {
+      emit(
+        state.copyWith(
+          fileImage: File(pickedFile.path),
+        ),
+      );
+    }
+  }
+
   Future<void> onRegisterWithEmailAndPasswordPressed(
     RegisterWithEmailAndPasswordPressed event,
     Emitter<AuthState> emit,
   ) async {
     final isPasswordValid = state.password.isValid();
     final isEmailValid = state.emailAddress.isValid();
-    if (isEmailValid && isPasswordValid) {
+    final isNameValid = state.name.isValid();
+    if (isEmailValid && isPasswordValid && isNameValid) {
       emit(
         state.copyWith(
           isSubmitting: true,
@@ -98,6 +141,8 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
         _auth.registerWithEmailAndPassword(
           emailAddress: state.emailAddress,
           password: state.password,
+          name: state.name,
+          file: state.fileImage,
         ),
         doOnSuccess: (auth) {
           emit(

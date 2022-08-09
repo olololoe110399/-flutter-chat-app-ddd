@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -6,12 +8,14 @@ class Avatar extends StatelessWidget {
     required this.radius,
     Key? key,
     this.url,
+    this.file,
     this.onTap,
   }) : super(key: key);
 
   const Avatar.small({
     Key? key,
     this.url,
+    this.file,
     this.onTap,
   })  : radius = 18,
         super(key: key);
@@ -19,6 +23,7 @@ class Avatar extends StatelessWidget {
   const Avatar.medium({
     Key? key,
     this.url,
+    this.file,
     this.onTap,
   })  : radius = 26,
         super(key: key);
@@ -26,12 +31,14 @@ class Avatar extends StatelessWidget {
   const Avatar.large({
     Key? key,
     this.url,
+    this.file,
     this.onTap,
   })  : radius = 34,
         super(key: key);
 
   final double radius;
   final String? url;
+  final File? file;
   final VoidCallback? onTap;
 
   @override
@@ -43,21 +50,31 @@ class Avatar extends StatelessWidget {
   }
 
   Widget _avatar(BuildContext context) {
-    return url != null
-        ? CircleAvatar(
-            radius: radius,
-            backgroundImage: CachedNetworkImageProvider(url!),
-            backgroundColor: Theme.of(context).cardColor,
-          )
-        : CircleAvatar(
-            radius: radius,
-            backgroundColor: Theme.of(context).cardColor,
-            child: Center(
-              child: Text(
-                '?',
-                style: TextStyle(fontSize: radius),
-              ),
-            ),
-          );
+    if ((url ?? '').isNotEmpty) {
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: CachedNetworkImageProvider(url!),
+        backgroundColor: Theme.of(context).cardColor,
+      );
+    }
+
+    if (file != null) {
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: FileImage(file!),
+        backgroundColor: Theme.of(context).cardColor,
+      );
+    }
+
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: Theme.of(context).cardColor,
+      child: Center(
+        child: Text(
+          '?',
+          style: TextStyle(fontSize: radius),
+        ),
+      ),
+    );
   }
 }

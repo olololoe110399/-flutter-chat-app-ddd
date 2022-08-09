@@ -27,3 +27,14 @@ class Password extends ValueObject<String> {
   @override
   final Either<ValueFailure<String>, String> value;
 }
+
+class Name extends ValueObject<String> {
+  factory Name(String input) {
+    return Name._(validateStringNotEmpty(input));
+  }
+
+  const Name._(this.value);
+
+  @override
+  final Either<ValueFailure<String>, String> value;
+}

@@ -16,11 +16,9 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends BasePageState<SignUpPage, AuthBloc> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _profilePictureController = TextEditingController();
 
   @override
   void dispose() {
-    _profilePictureController.dispose();
     _nameController.dispose();
     super.dispose();
   }
@@ -33,13 +31,17 @@ class _SignUpPageState extends BasePageState<SignUpPage, AuthBloc> {
           listenWhen: (previous, current) => current.authEntity.isSome(),
           listener: (context, state) {
             state.authEntity.fold(() {}, (auth) {
+              final streamUser = User(
+                id: auth.user.uid,
+                name: auth.user.displayName,
+                image: auth.user.photoURL,
+              );
               AppStreamChat.instance.connectUser(
                 token: auth.token,
-                user: User(
-                  id: auth.user.uid,
-                  name: _nameController.text,
-                  image: _profilePictureController.text,
-                ),
+                user: streamUser,
+              );
+              AppStreamChat.instance.updateUser(
+                user: streamUser,
               );
               navigator.replace(const MainRoute());
             });
@@ -80,23 +82,36 @@ class _SignUpPageState extends BasePageState<SignUpPage, AuthBloc> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(Dimens.d8.responsive()),
-                  child: TextFormField(
-                    controller: _nameController,
-                    validator: _nameInputValidator,
-                    decoration: InputDecoration(hintText: S.of(context).name),
-                    keyboardType: TextInputType.name,
-                    autofillHints: const [AutofillHints.name, AutofillHints.username],
-                  ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (previous, current) =>
+                      current.fileImage != null &&
+                      previous.fileImage?.path != current.fileImage?.path,
+                  builder: (context, state) {
+                    return Avatar.large(
+                      file: state.fileImage,
+                      onTap: () => bloc.add(const AuthEvent.pickImage()),
+                    );
+                  },
                 ),
-                Padding(
-                  padding: EdgeInsets.all(Dimens.d8.responsive()),
-                  child: TextFormField(
-                    controller: _profilePictureController,
-                    decoration: InputDecoration(hintText: S.of(context).pictureUrl),
-                    keyboardType: TextInputType.url,
-                  ),
+                BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: EdgeInsets.all(Dimens.d8.responsive()),
+                      child: TextFormField(
+                        onChanged: (value) => bloc.add(AuthEvent.nameChanged(value)),
+                        validator: (_) => state.name.value.fold(
+                          (f) => f.maybeMap(
+                            empty: (_) => S.of(context).doNotEmpty,
+                            orElse: () => null,
+                          ),
+                          (r) => null,
+                        ),
+                        decoration: InputDecoration(hintText: S.of(context).name),
+                        keyboardType: TextInputType.name,
+                        autofillHints: const [AutofillHints.name, AutofillHints.username],
+                      ),
+                    );
+                  },
                 ),
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
@@ -189,13 +204,5 @@ class _SignUpPageState extends BasePageState<SignUpPage, AuthBloc> {
     if (_formKey.currentState!.validate()) {
       bloc.add(const AuthEvent.registerWithEmailAndPasswordPressed());
     }
-  }
-
-  String? _nameInputValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return S.of(context).doNotEmpty;
-    }
-
-    return null;
   }
 }
