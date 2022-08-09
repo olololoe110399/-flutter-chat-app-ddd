@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
 
 import '../../../application/application.dart';
@@ -50,6 +52,43 @@ class _ChatPageState extends BasePageState<_ChatPage, ChatBloc> {
   void dispose() {
     unreadCountSubscription?.cancel();
     super.dispose();
+  }
+
+  @override
+  Widget buildPageLoading() {
+    return Container(
+      color: Theme.of(context).cardColor.withOpacity(0.3),
+      width: double.infinity,
+      height: double.infinity,
+      child: super.buildPageLoading(),
+    );
+  }
+
+  @override
+  Widget buildPageListener({required Widget child}) {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ChatBloc, ChatState>(
+          listenWhen: (previous, current) => current.attachments.isSome(),
+          listener: (context, state) {
+            state.attachments.fold(
+              () {},
+              (a) async {
+                if (a.isNotEmpty) {
+                  await AppStreamChat.instance.channel?.sendMessage(
+                    Message(
+                      text: state.text,
+                      attachments: a,
+                    ),
+                  );
+                }
+              },
+            );
+          },
+        ),
+      ],
+      child: child,
+    );
   }
 
   @override
@@ -115,6 +154,8 @@ class _ChatPageState extends BasePageState<_ChatPage, ChatBloc> {
             ),
             _ActionBar(
               channel: AppStreamChat.instance.channel,
+              onTapCamera: () => bloc.add(const ChatEvent.pickImage()),
+              onChangeText: (text) => bloc.add(ChatEvent.textChanged(text)),
             ),
           ],
         ),
@@ -346,12 +387,23 @@ class _MessageTitle extends StatelessWidget {
                   bottomRight: Radius.circular(_borderRadius),
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimens.d12.responsive(),
-                  vertical: Dimens.d20.responsive(),
-                ),
-                child: Text(message.text ?? ''),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimens.d12.responsive(),
+                      vertical: Dimens.d20.responsive(),
+                    ),
+                    child: Text(message.text ?? ''),
+                  ),
+                  if (message.attachments.isNotEmpty)
+                    ...message.attachments
+                        .map(
+                          (a) => _Attachment(attachment: a),
+                        )
+                        .toList(),
+                ],
               ),
             ),
             Padding(
@@ -401,17 +453,32 @@ class _MessageOwnTitle extends StatelessWidget {
                   bottomLeft: Radius.circular(_borderRadius),
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimens.d12.responsive(),
-                  vertical: Dimens.d20.responsive(),
-                ),
-                child: Text(
-                  message.text ?? '',
-                  style: const TextStyle(
-                    color: AppColors.textLigth,
-                  ),
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  ((message.text ?? '').isNotEmpty)
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Dimens.d12.responsive(),
+                            vertical: Dimens.d20.responsive(),
+                          ),
+                          child: Text(
+                            message.text ?? '',
+                            style: const TextStyle(
+                              color: AppColors.textLigth,
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: Dimens.d20.responsive(),
+                        ),
+                  if (message.attachments.isNotEmpty)
+                    ...message.attachments
+                        .map(
+                          (a) => _Attachment(attachment: a),
+                        )
+                        .toList(),
+                ],
               ),
             ),
             Padding(
@@ -435,10 +502,14 @@ class _MessageOwnTitle extends StatelessWidget {
 class _ActionBar extends StatefulWidget {
   const _ActionBar({
     required this.channel,
+    required this.onTapCamera,
+    required this.onChangeText,
     Key? key,
   }) : super(key: key);
 
   final Channel? channel;
+  final Function() onTapCamera;
+  final Function(String) onChangeText;
 
   @override
   __ActionBarState createState() => __ActionBarState();
@@ -482,8 +553,11 @@ class __ActionBarState extends State<_ActionBar> {
               padding: EdgeInsets.symmetric(
                 horizontal: Dimens.d16.responsive(),
               ),
-              child: const Icon(
-                CupertinoIcons.camera_fill,
+              child: GestureDetector(
+                onTap: () => widget.onTapCamera(),
+                child: const Icon(
+                  CupertinoIcons.camera_fill,
+                ),
               ),
             ),
           ),
@@ -521,6 +595,7 @@ class __ActionBarState extends State<_ActionBar> {
   }
 
   void _onTextChange() {
+    widget.onChangeText(controller.text);
     if (_debounce?.isActive ?? false) {
       _debounce?.cancel();
     }
@@ -639,3 +714,32 @@ class _TypingIndicator extends StatelessWidget {
     );
   }
 }
+
+class _Attachment extends StatelessWidget {
+  const _Attachment({
+    required this.attachment,
+    Key? key,
+  }) : super(key: key);
+
+  final Attachment attachment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(Dimens.d4.responsive()),
+          child: CachedNetworkImage(
+            imageUrl: attachment.assetUrl!,
+            width: MediaQuery.of(context).size.width / 2,
+          ),
+        ),
+        SizedBox(
+          height: Dimens.d20.responsive(),
+        ),
+      ],
+    );
+  }
+}
+
+enum AttachmentType { image, audio, videos, text }
