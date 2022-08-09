@@ -33,17 +33,6 @@ jobs:
       - name: Install dependencies and run build runner
         run: make sync
 
-      - name: Format code
-        run: make format
-
-      - name: Analyze
-        run: make analyze
-
-      - name: Metrics
-        uses: dart-code-checker/dart-code-metrics-action@v2
-        with: 
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Gen file google-services.json
         run: echo "${{ secrets.GOOGLE_SERVICES }}" | base64 --decode > android/app/google-services.json
 
