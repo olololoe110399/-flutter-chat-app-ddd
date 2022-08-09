@@ -84,4 +84,9 @@ class AppStreamChat {
         user,
         token,
       );
+
+  void updateUser({
+    required User user,
+  }) =>
+      client.updateUser(user);
 }

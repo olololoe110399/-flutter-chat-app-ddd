@@ -21,7 +21,9 @@ Flutter project using Domain-Driven Design and bloc pattern
   - Create project in here <https://console.firebase.google.com/>
   - Add Firebase to flutter app <https://firebase.google.com/docs/flutter/setup>
   - Enable Authentication and select and adding your first sign-in method is Email/Password Native providers
-  - Enable Functions and deploy
+  - Enable Functions and deploy code:
+    - Run `cd functions` and `firebase deploy --only functions`
+  - Enable Storage.
 
 ### Install
 

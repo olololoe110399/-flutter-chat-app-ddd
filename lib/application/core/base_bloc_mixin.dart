@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../domain/domain.dart';
 import '../../presentation/presentation.dart';
@@ -43,5 +45,19 @@ mixin BaseBlocMixin<E extends BaseBlocEvent, S extends BaseBlocState> on BaseBlo
       },
     );
     await doOnCompleleted?.call();
+  }
+
+  EventTransformer<Event> throttleTime<Event>({
+    Duration duration = const Duration(milliseconds: 500),
+    bool trailing = false,
+    bool leading = true,
+  }) {
+    return (events, mapper) => events
+        .throttleTime(
+          duration,
+          trailing: trailing,
+          leading: leading,
+        )
+        .flatMap(mapper);
   }
 }

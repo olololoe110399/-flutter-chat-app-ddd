@@ -10,6 +10,8 @@ class AuthEvent extends BaseBlocEvent with _$AuthEvent {
   const factory AuthEvent.signedOut() = SignedOut;
   const factory AuthEvent.emailChanged(String emailStr) = EmailChanged;
   const factory AuthEvent.passwordChanged(String passwordStr) = PasswordChanged;
+  const factory AuthEvent.nameChanged(String nameStr) = NameChanged;
+  const factory AuthEvent.pickImage() = PickImage;
   const factory AuthEvent.registerWithEmailAndPasswordPressed() =
       RegisterWithEmailAndPasswordPressed;
   const factory AuthEvent.signInWithEmailAndPasswordPressed() = SignInWithEmailAndPasswordPressed;
