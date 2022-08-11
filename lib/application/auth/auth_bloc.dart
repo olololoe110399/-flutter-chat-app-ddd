@@ -8,6 +8,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../domain/domain.dart';
 import '../../presentation/presentation.dart';
+import '../../shared/shared.dart';
 import '../core/core.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -145,6 +146,10 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
           file: state.fileImage,
         ),
         doOnSuccess: (auth) {
+          auth.fold(() => null, (a) {
+            SharedPrefHelper.instance.userId = a.user.uid;
+            SharedPrefHelper.instance.userToken = a.token;
+          });
           emit(
             state.copyWith(
               authEntity: auth,
@@ -181,6 +186,10 @@ class AuthBloc extends BaseBloc<AuthEvent, AuthState> {
           password: state.password,
         ),
         doOnSuccess: (auth) {
+          auth.fold(() => null, (a) {
+            SharedPrefHelper.instance.userId = a.user.uid;
+            SharedPrefHelper.instance.userToken = a.token;
+          });
           emit(
             state.copyWith(
               authEntity: auth,

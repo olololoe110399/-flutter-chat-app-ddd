@@ -15,17 +15,22 @@ Future<void> main() async {
   );
   getIt.registerSingleton<AppRouter>(AppRouter());
   await configureInjection(Environment.prod);
+  await SharedPrefHelper.instance.init();
+  await FirebaseMessagingHelper.instance.init();
+  await LocalPushNotificationHelper.instance.init();
   await ViewUtils.setPreferredOrientations(
     UiConstants.deviceType == DeviceType.mobile
         ? UiConstants.mobileOrientation
         : UiConstants.tabletOrientation,
   );
   ViewUtils.setSystemUIOverlayStyle(UiConstants.systemUiOverlay);
-  AppConfig.instance.init();
   runApp(
     AppWidget(
       appTheme: AppTheme(),
-      client: StreamChatClient(AppConfig.instance.streamKey),
+      client: StreamChatClient(
+        AppConfig.instance.streamKey,
+        logLevel: Level.INFO,
+      ),
     ),
   );
 }

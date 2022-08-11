@@ -31,7 +31,7 @@ class IAuthImpl implements IAuth {
             .httpsCallable('ext-auth-chat-getStreamUserToken')
             .call<String>();
         // authenticated
-
+        print("hehe ${user.uid}");
         return right(
           optionOf(
             AuthEntity(

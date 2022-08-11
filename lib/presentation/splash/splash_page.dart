@@ -33,6 +33,7 @@ class _SplashPageState extends BasePageState<SplashPage, AuthBloc> {
                 f.fold(
                   () => navigator.replace(const SignInRoute()),
                   (authEntity) {
+                    logD(authEntity.user.uid);
                     AppStreamChat.instance.connectUser(
                       user: User(id: authEntity.user.uid),
                       token: authEntity.token,

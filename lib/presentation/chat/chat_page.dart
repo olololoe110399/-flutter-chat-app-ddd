@@ -608,6 +608,7 @@ class __ActionBarState extends State<_ActionBar> {
 
   Future<void> _sendMessage() async {
     if (controller.text.isNotEmpty) {
+      print("hehe ${controller.message.id}");
       await widget.channel?.sendMessage(controller.message);
       controller.clear();
       ViewUtils.hideKeyboard(context);
