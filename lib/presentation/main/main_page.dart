@@ -15,6 +15,12 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends BasePageState<MainPage, MainBloc> {
   @override
+  void initState() {
+    super.initState();
+    bloc.add(const MainEvent.mainInitial());
+  }
+
+  @override
   Widget buildPage(BuildContext context) {
     return AutoTabsScaffold(
       routes: navigator.tabsRoutes,
