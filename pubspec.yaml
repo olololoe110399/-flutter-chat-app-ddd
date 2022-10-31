@@ -58,7 +58,7 @@ dependencies:
   json_annotation: ^4.6.0
   provider: ^6.0.3
   rxdart: ^0.27.5
-  stream_chat_flutter_core: ^4.4.1
+  stream_chat_flutter_core: ^5.1.0
 
 dev_dependencies:
 
